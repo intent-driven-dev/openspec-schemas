@@ -22,7 +22,7 @@ Affected schema:
 
 #### Scenario: Post-apply schema review validates the updated schema
 - **WHEN** implementation is complete and applied
-- **THEN** running `openspec schema review minimalist` succeeds and confirms the schema remains valid after these format changes
+- **THEN** running `openspec schema validate minimalist` succeeds and confirms the schema remains valid after these format changes
 
 ## MODIFIED Requirements
 

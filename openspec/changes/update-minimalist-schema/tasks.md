@@ -8,5 +8,5 @@
 ## 2. Verify and Wrap Up
 
 - [x] 2.1 Validate acceptance criteria from `specs/minimalist-spec-format.md` against implemented changes.
-- [x] 2.2 Run `openspec schema review minimalist` and confirm it passes.
+- [x] 2.2 Run `openspec schema validate minimalist` and confirm it passes.
 - [x] 2.3 Prepare concise reviewer notes listing changed files in `openspec/schemas/minimalist/` and why each change was required.
