@@ -1,0 +1,55 @@
+# Author this AsyncAPI document from event-storming, event-modeling, specs,
+# and design artifacts.
+#
+# Validation gate:
+#   asyncapi-cli validate asyncapi.yaml
+# Do not mark the asyncapi artifact complete until validation succeeds.
+
+asyncapi: 3.0.0
+info:
+  title: <service-or-domain-name>
+  version: 0.1.0
+  description: |
+    AsyncAPI contract derived from event discovery and design decisions.
+
+defaultContentType: application/json
+
+servers:
+  production:
+    host: <broker-host>
+    protocol: <kafka|nats|amqp|mqtt|ws>
+    description: Primary event broker
+
+channels:
+  <domain.event.v1>:
+    address: <domain.event.v1>
+    messages:
+      <MessageName>:
+        $ref: '#/components/messages/<MessageName>'
+
+operations:
+  <publishMessageName>:
+    action: send
+    channel:
+      $ref: '#/channels/<domain.event.v1>'
+    messages:
+      - $ref: '#/channels/<domain.event.v1>/messages/<MessageName>'
+
+components:
+  messages:
+    <MessageName>:
+      name: <MessageName>
+      title: <human-readable-title>
+      summary: <what this message represents>
+      payload:
+        $ref: '#/components/schemas/<PayloadName>'
+
+  schemas:
+    <PayloadName>:
+      type: object
+      required: []
+      properties: {}
+
+  securitySchemes:
+    <schemeName>:
+      type: <userPassword|apiKey|X509|symmetricEncryption|asymmetricEncryption|httpApiKey|http|oauth2|openIdConnect>

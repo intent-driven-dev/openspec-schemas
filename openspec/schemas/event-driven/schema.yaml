@@ -1,0 +1,103 @@
+name: event-driven
+version: 1
+description: Event-driven workflow from discovery to AsyncAPI-first implementation planning
+artifacts:
+  - id: event-storming
+    generates: event-storming.md
+    description: Collaborative discovery of domain events, commands, actors, and boundaries
+    template: event-storming.md
+    instruction: |
+      Capture the event storming outcomes that anchor downstream artifacts.
+
+      Focus areas:
+      - Domain events (past-tense business facts)
+      - Commands that trigger behavior
+      - Actors and external systems
+      - Aggregates or bounded contexts
+      - Automations/policies that chain commands and events
+      - Hotspots, ambiguities, and open questions
+
+      Keep this artifact collaborative and discovery-oriented. It is an input for
+      event modeling, specs, design, and asyncapi authoring.
+    requires: []
+
+  - id: event-modeling
+    generates: event-modeling.md
+    description: Event modeling flow from triggers to read models
+    template: event-modeling.md
+    instruction: |
+      Transform event-storming outputs into structured event flows.
+
+      Use swim lanes in this sequence:
+      Trigger -> Command -> Event -> Read Model
+
+      Add Mermaid diagrams to visualize interactions and timeline flow. This
+      artifact should make dependencies and message flow explicit so later specs,
+      design, and asyncapi work stays aligned with discovered behavior.
+    requires:
+      - event-storming
+
+  - id: specs
+    generates: specs/**/*.md
+    description: User-story specifications with testable acceptance criteria
+    template: specs/spec.md
+    instruction: |
+      Author user-story specifications derived from discovery/modeling artifacts.
+
+      Requirements:
+      - Use user-story format: As a <role>, I want <capability>, so that <benefit>.
+      - Use Given/When/Then acceptance criteria for each story.
+      - Keep each story traceable to event-storming and event-modeling outputs.
+    requires:
+      - event-modeling
+
+  - id: design
+    generates: design.md
+    description: Technical design decisions before AsyncAPI authoring
+    template: design.md
+    instruction: |
+      Document implementation-level architecture decisions before writing AsyncAPI.
+
+      Include broker/runtime choices, subject naming conventions, payload/schema
+      formats, security controls, and operational concerns. Reference decisions
+      back to specs and event-modeling flows.
+    requires:
+      - specs
+
+  - id: asyncapi
+    generates: asyncapi.yaml
+    description: AsyncAPI technical specification derived from prior artifacts
+    template: asyncapi.yaml
+    instruction: |
+      Author AsyncAPI from event-storming, event-modeling, specs, and design.
+
+      Completion guidance:
+      - `asyncapi.yaml` is not complete until validation succeeds.
+      - Run `asyncapi-cli validate asyncapi.yaml`.
+      - If validation fails, resolve errors before marking this artifact done.
+    requires:
+      - design
+
+  - id: tasks
+    generates: tasks.md
+    description: Implementation checklist created after validated AsyncAPI
+    template: tasks.md
+    instruction: |
+      Plan implementation only after upstream artifacts are complete.
+
+      Preconditions:
+      - Specs are reviewed.
+      - Design is reviewed.
+      - AsyncAPI has been validated with `asyncapi-cli validate asyncapi.yaml`.
+
+      Break work into small, dependency-ordered checkbox tasks.
+    requires:
+      - asyncapi
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Read context files, work through pending tasks, mark complete as you go.
+    Pause if you hit blockers or need clarification.
