@@ -14,3 +14,9 @@ REPO_URL="<git-or-github-url>" SCHEMA="<schema-name>" && git clone --depth 1 "$R
 - Not a good fit: complete apps with multiple layers, database design, and deeper architecture choices.
 
 See `openspec/schemas/minimalist/README.md` for usage and activation.
+
+## Agent Skills
+
+- `openspec-schema-authoring-guide`: Deep guidance for understanding OpenSpec schema internals (with `spec-driven` as canonical) and drafting custom schemas in this repository.
+  - Skill: `.codex/skills/openspec-schema-authoring-guide/SKILL.md`
+  - Baseline comparison: `.codex/skills/openspec-schema-authoring-guide/references/schema-comparison.md`
