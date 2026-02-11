@@ -1,20 +1,15 @@
-schema: spec-driven
+schema: minimalist
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Repository purpose: Package reusable OpenSpec schemas.
+  Quality gate: After every implementation/apply that changes schemas, run
+  `openspec schema review <schema-name>` for each affected schema before
+  considering the work complete.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  specs:
+    - If a change modifies files under `openspec/schemas/`, list each affected schema name explicitly.
+    - Ensure requirements/scenarios include a post-apply verification expectation for schema review.
+  tasks:
+    - Add a required verification task: run `openspec schema review <schema-name>` for each affected schema.
+    - Do not mark apply complete until all required schema review commands pass.
