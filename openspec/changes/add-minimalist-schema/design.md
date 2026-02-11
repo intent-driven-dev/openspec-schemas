@@ -1,13 +1,13 @@
 ## Context
 
-This repository is being established as a catalog of reusable, project-local OpenSpec schemas. The first schema, `minimalist`, is intentionally narrow: it should support well-scoped small changes by skipping proposal/design artifacts and proceeding directly through specs and tasks. The repository also needs repeatable packaging guidance so coding agents can install any schema by copying one folder.
+This repository is being established as a catalog of reusable, project-local OpenSpec schemas. The first schema, `minimalist`, is intentionally narrow: it should support quick-start work by skipping proposal/design artifacts and proceeding directly through specs and tasks. The repository also needs repeatable packaging guidance so coding agents can install any schema quickly.
 
 ## Goals / Non-Goals
 
 **Goals:**
 - Define a consistent per-schema folder contract that can scale to multiple custom schemas.
 - Provide installation and activation instructions targeted at coding-agent workflows.
-- Define `minimalist` as a disciplined workflow with explicit fit boundaries.
+- Define `minimalist` as a disciplined workflow with explicit fit boundaries (landing pages/simple apps vs complete multi-layer apps).
 
 **Non-Goals:**
 - Creating a universal schema that covers complex architectural or cross-cutting changes.
@@ -28,9 +28,9 @@ This repository is being established as a catalog of reusable, project-local Ope
    - Rationale: Teams need judgment flexibility; strict automated guards are brittle.
    - Alternative considered: Enforce scope checks in scripts. Rejected for now due to complexity and false positives.
 
-4. Coding-agent installation path is copy-based and local-first.
-   - Rationale: Matches current OpenSpec local schema model and works without package infrastructure.
-   - Alternative considered: Centralized installer command. Deferred until schema set stabilizes.
+4. Coding-agent installation path is a root-level single-line copy/install command with `REPO_URL` and `SCHEMA` arguments.
+   - Rationale: Agents and users can copy-paste one line without needing custom tooling, while preserving local schema folders.
+   - Alternative considered: Multi-step plain-English instructions only. Kept as supporting docs, but root one-liner is faster for common agent workflows.
 
 ## Risks / Trade-offs
 

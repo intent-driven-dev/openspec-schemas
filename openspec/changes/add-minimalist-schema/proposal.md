@@ -6,7 +6,7 @@ This repository is intended to host reusable custom OpenSpec schemas, but it doe
 
 - Add the first custom schema, `minimalist`, focused on lightweight work that can skip proposal/design and go directly from specs to tasks.
 - Define clear usage guidance for when `minimalist` is and is not appropriate (INVEST-friendly, small, low-risk work).
-- Add install/activation documentation so coding agents can copy one schema folder into `openspec/schemas/<name>/` and set `schema: <name>` in `openspec/config.yaml`.
+- Add install/activation documentation so coding agents can use a single copy-paste install line from the root README and set `schema: <name>` in `openspec/config.yaml`.
 - Establish a scalable repository layout with one folder per custom schema.
 - Add a repository-root `README.md` that explains the purpose of this repo and provides an agent quick start that points users to individual schema READMEs.
 

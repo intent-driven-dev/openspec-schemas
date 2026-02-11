@@ -1,0 +1,19 @@
+name: minimalist
+version: 1
+description: Lightweight schema for well-scoped, low-risk changes
+artifacts:
+  - id: specs
+    generates: specs/**/*.md
+    description: Detailed specifications with requirements and scenarios
+    template: specs/spec.md
+    requires: []
+  - id: tasks
+    generates: tasks.md
+    description: Implementation checklist with trackable tasks
+    template: tasks.md
+    requires:
+      - specs
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
