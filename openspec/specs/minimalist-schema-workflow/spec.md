@@ -24,3 +24,10 @@ Changes created with `minimalist` SHALL capture requirement-level changes throug
 #### Scenario: Requirement changes are captured before execution planning
 - **WHEN** a team starts a `minimalist` change
 - **THEN** they define delta requirements in specs before writing tasks for implementation
+
+### Requirement: Minimalist specs SHALL use user stories with Gherkin acceptance criteria
+The `minimalist` spec template SHALL guide authors to capture each change as user stories and explicit `Given/When/Then` acceptance criteria so expectations remain testable and unambiguous.
+
+#### Scenario: Author follows the minimalist spec template
+- **WHEN** a contributor creates or updates `specs/**/*.md` in a `minimalist` change
+- **THEN** the spec uses `As a <role>, I want <capability>, so that <benefit>` phrasing and `Given/When/Then` acceptance criteria

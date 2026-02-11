@@ -4,7 +4,7 @@ description: Lightweight schema for well-scoped, low-risk changes
 artifacts:
   - id: specs
     generates: specs/**/*.md
-    description: Detailed specifications with requirements and scenarios
+    description: Specifications authored as user stories with Given/When/Then acceptance criteria
     template: specs/spec.md
     requires: []
   - id: tasks

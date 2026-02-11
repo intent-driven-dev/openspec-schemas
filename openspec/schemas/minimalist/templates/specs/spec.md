@@ -1,22 +1,27 @@
-## ADDED Requirements
+## ADDED User Stories
 
-### Requirement: <capability or behavior>
-Describe the requirement that this change adds.
+### User Story: <capability or behavior>
+As a <role>, I want <capability>, so that <benefit>.
 
-#### Scenario: <scenario name>
-- **WHEN** <condition>
-- **THEN** <expected outcome>
+#### Acceptance Criteria
+- **Given** <context>
+- **When** <condition>
+- **Then** <expected outcome>
 
-## MODIFIED Requirements
+## MODIFIED User Stories
 
-### Requirement: <existing requirement name>
-Describe how the requirement changes.
+### User Story: <existing capability or behavior>
+As a <role>, I want <updated capability>, so that <updated benefit>.
 
-#### Scenario: <updated scenario name>
-- **WHEN** <condition>
-- **THEN** <expected outcome>
+#### Acceptance Criteria
+- **Given** <context>
+- **When** <updated condition>
+- **Then** <updated expected outcome>
 
-## REMOVED Requirements
+## REMOVED User Stories
 
-### Requirement: <removed requirement name>
-Explain why this requirement is removed.
+### User Story: <removed capability or behavior>
+As a <role>, I wanted <removed capability>, so that <previous benefit>.
+
+#### Removal Rationale
+Explain why this user story is removed.

@@ -17,3 +17,11 @@ Set this in `openspec/config.yaml`:
 ```yaml
 schema: minimalist
 ```
+
+## Spec Format
+
+When authoring `specs` artifacts in this schema:
+- Write each requirement as a user story:
+  `As a <role>, I want <capability>, so that <benefit>.`
+- Write acceptance criteria using Gherkin structure:
+  `Given ...`, `When ...`, `Then ...`
