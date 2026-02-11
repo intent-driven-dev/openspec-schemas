@@ -3,6 +3,10 @@
 `event-driven` is for systems that communicate through events and require a
 clear discovery-to-spec workflow before implementation planning.
 
+Key references:
+- AsyncAPI: https://www.asyncapi.com/
+- Event Storming: https://en.wikipedia.org/wiki/Event_storming
+
 - Good fit: event-centric domains, asynchronous integrations, pub/sub systems,
   and teams that need a validated AsyncAPI contract before coding.
 - Not a good fit: tiny low-risk changes where `specs -> tasks` is enough and

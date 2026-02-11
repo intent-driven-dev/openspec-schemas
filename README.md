@@ -1,29 +1,23 @@
 # OpenSpec Schemas
 
-Custom OpenSpec schemas packaged as copyable folders under `openspec/schemas/`.
+Custom [OpenSpec](https://github.com/Fission-AI/OpenSpec) schemas packaged as copyable folders under `openspec/schemas/`.
 
-## Agent Install (single line)
+Default OpenSpec includes the `spec-driven` schema, which is a strong general-purpose workflow. This repo adds more focused workflows for specific delivery contexts, and also demonstrates how to customise OpenSpec for different styles of work.
 
-```bash
-REPO_URL="<git-or-github-url>" SCHEMA="<schema-name>" && git clone --depth 1 "$REPO_URL" /tmp/openspec-schemas && mkdir -p openspec/schemas && cp -R "/tmp/openspec-schemas/openspec/schemas/$SCHEMA" "openspec/schemas/$SCHEMA" && rm -rf /tmp/openspec-schemas
-```
+## Install a Schema (Agent + Shell Agnostic)
+
+Copy the schema folder you want from `https://github.com/intent-driven-dev/openspec-schemas` into your project at `openspec/schemas/<schema-name>`.
+
+Example: copy `openspec/schemas/event-driven` from this repo into your project as `openspec/schemas/event-driven`.
 
 ## Minimalist
 
-- Good fit: landing pages and simple apps with too many technical design decisions where the goal is to start building quickly.
-- Not a good fit: complete apps with multiple layers, database design, and deeper architecture choices.
+Fast path from spec to execution using user-story requirements and Gherkin acceptance-criteria style.
 
-See `openspec/schemas/minimalist/README.md` for usage and activation.
+For more details, see `openspec/schemas/minimalist/README.md`.
 
 ## Event-Driven
 
-- Good fit: event-centric and asynchronous systems that need a structured discovery-to-spec workflow before implementation planning.
-- Not a good fit: very small low-risk work where a lightweight `specs -> tasks` flow is sufficient.
+Structured workflow for event-centric systems with [Event Storming](https://en.wikipedia.org/wiki/Event_storming) discovery followed by [AsyncAPI](https://www.asyncapi.com/) specification.
 
-See `openspec/schemas/event-driven/README.md` for usage, activation, and stage gates.
-
-## Agent Skills
-
-- `openspec-schema-authoring-guide`: Deep guidance for understanding OpenSpec schema internals (with `spec-driven` as canonical) and drafting custom schemas in this repository.
-  - Skill: `.codex/skills/openspec-schema-authoring-guide/SKILL.md`
-  - Baseline comparison: `.codex/skills/openspec-schema-authoring-guide/references/schema-comparison.md`
+For more details, see `openspec/schemas/event-driven/README.md`.
