@@ -23,13 +23,13 @@ As a contributor, I want a documented color legend for Mermaid nodes used by the
 - **Then** they can find a clear mapping between diagram concepts (such as trigger, command, event, read model, actor, and automation) and their intended colors.
 - **And** the guide calls out the event-storming-standard baseline and any schema-specific deviations.
 
-### User Story: Post-apply schema review verification for event-driven updates
+### User Story: Post-apply schema validation for event-driven updates
 As a reviewer, I want schema-level verification after implementing Mermaid color-coding changes in `event-driven`, so that styling updates are validated before considering the change complete.
 
 #### Acceptance Criteria
 - **Given** implementation modifies files under `openspec/schemas/event-driven/`
 - **When** the implementation tasks are completed
-- **Then** the workflow includes running `openspec schema review event-driven` and treating a successful review as part of completion criteria.
+- **Then** the workflow includes running `openspec schema validate event-driven` and treating a successful validation as part of completion criteria.
 
 ## MODIFIED User Stories
 

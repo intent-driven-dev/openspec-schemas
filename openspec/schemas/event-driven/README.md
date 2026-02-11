@@ -31,3 +31,22 @@ Gate expectations:
 - `specs` and `design` must be completed before `asyncapi`.
 - `tasks` are planned only after reviewed `specs`, reviewed `design`, and a
   validated AsyncAPI document (`asyncapi-cli validate asyncapi.yaml`).
+
+## Mermaid Color Legend
+
+Use explicit `classDef` and `class` assignments in Mermaid templates so color
+semantics stay stable across renderers.
+
+Event-storming standard baseline:
+- Domain Event: orange (`event`)
+- Command: blue (`command`)
+- Actor/User: yellow (`actor`)
+- Policy/Automation: violet family (`policy`)
+- Read Model/Projection: green (`readModel`)
+
+Event-driven schema mapping notes:
+- `Trigger` in `event-modeling` is treated as the actor/user lane and should use
+  the `actor` color mapping.
+- Prefer `Read Model` node labels in event-modeling artifacts and
+  `Read Model/Projection` labels in event-storming artifacts; both map to
+  `readModel` (green).

@@ -37,19 +37,49 @@ flowchart LR
   T[Trigger] --> C[Command]
   C --> E[Event]
   E --> R[Read Model]
+
+  classDef actor fill:#F7DC6F,stroke:#B7950B,color:#1C1C1C
+  classDef command fill:#85C1E9,stroke:#2471A3,color:#1C1C1C
+  classDef event fill:#F5B041,stroke:#AF601A,color:#1C1C1C
+  classDef policy fill:#D7BDE2,stroke:#884EA0,color:#1C1C1C
+  classDef readModel fill:#82E0AA,stroke:#1E8449,color:#1C1C1C
+
+  class T actor
+  class C command
+  class E event
+  class R readModel
 ```
 
 ## Timeline / Swimlane Diagram
 ```mermaid
-sequenceDiagram
-  participant Trigger
-  participant Command
-  participant Event
-  participant ReadModel
+flowchart LR
+  subgraph TriggerLane[Trigger]
+    T1[Trigger]
+  end
+  subgraph CommandLane[Command]
+    C1[Command]
+  end
+  subgraph EventLane[Event]
+    E1[Event]
+  end
+  subgraph ReadModelLane[Read Model]
+    R1[Read Model]
+  end
 
-  Trigger->>Command: initiate
-  Command->>Event: emit event
-  Event->>ReadModel: project update
+  T1 --> C1
+  C1 --> E1
+  E1 --> R1
+
+  classDef actor fill:#F7DC6F,stroke:#B7950B,color:#1C1C1C
+  classDef command fill:#85C1E9,stroke:#2471A3,color:#1C1C1C
+  classDef event fill:#F5B041,stroke:#AF601A,color:#1C1C1C
+  classDef policy fill:#D7BDE2,stroke:#884EA0,color:#1C1C1C
+  classDef readModel fill:#82E0AA,stroke:#1E8449,color:#1C1C1C
+
+  class T1 actor
+  class C1 command
+  class E1 event
+  class R1 readModel
 ```
 
 ## Derivation Notes for Downstream Artifacts
