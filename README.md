@@ -4,6 +4,10 @@ Custom [OpenSpec](https://github.com/Fission-AI/OpenSpec) schemas packaged as co
 
 Default OpenSpec includes the `spec-driven` schema, which is a strong general-purpose workflow. This repo adds more focused workflows for specific delivery contexts, and also demonstrates how to customise OpenSpec for different styles of work.
 
+## Video
+
+[![Watch on YouTube](https://img.youtube.com/vi/k01nbZfwB34/0.jpg)](https://www.youtube.com/watch?v=k01nbZfwB34)
+
 ## Install a Schema
 
 Copy the schema folder you want from `https://github.com/intent-driven-dev/openspec-schemas/openspec/schemas` into one of these locations:
