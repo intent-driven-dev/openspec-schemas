@@ -54,3 +54,5 @@ Event-driven schema mapping notes:
 - Prefer `Read Model` node labels in event-modeling artifacts and
   `Read Model/Projection` labels in event-storming artifacts; both map to
   `readModel` (green).
+
+For more schemas, refer to https://github.com/intent-driven-dev/openspec-schemas.

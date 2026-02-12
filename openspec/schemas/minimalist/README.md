@@ -25,3 +25,5 @@ When authoring `specs` artifacts in this schema:
   `As a <role>, I want <capability>, so that <benefit>.`
 - Write acceptance criteria using Gherkin structure:
   `Given ...`, `When ...`, `Then ...`
+
+For more schemas, refer to https://github.com/intent-driven-dev/openspec-schemas.
