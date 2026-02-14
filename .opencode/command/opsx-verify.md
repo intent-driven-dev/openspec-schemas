@@ -1,6 +1,5 @@
 ---
 description: Verify implementation matches change artifacts before archiving
-argument-hint: command arguments
 ---
 
 Verify that an implementation matches the change artifacts (specs, tasks, design).

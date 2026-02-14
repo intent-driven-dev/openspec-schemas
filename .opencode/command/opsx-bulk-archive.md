@@ -1,6 +1,5 @@
 ---
 description: Archive multiple completed changes at once
-argument-hint: command arguments
 ---
 
 Archive multiple completed changes in a single operation.

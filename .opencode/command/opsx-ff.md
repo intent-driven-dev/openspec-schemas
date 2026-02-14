@@ -1,6 +1,5 @@
 ---
 description: Create a change and generate all artifacts needed for implementation in one go
-argument-hint: command arguments
 ---
 
 Fast-forward through artifact creation - generate everything needed to start implementation.

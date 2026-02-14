@@ -1,6 +1,5 @@
 ---
 description: Implement tasks from an OpenSpec change (Experimental)
-argument-hint: command arguments
 ---
 
 Implement tasks from an OpenSpec change.

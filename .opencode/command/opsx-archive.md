@@ -1,6 +1,5 @@
 ---
 description: Archive a completed change in the experimental workflow
-argument-hint: command arguments
 ---
 
 Archive a completed change in the experimental workflow.

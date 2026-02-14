@@ -1,6 +1,5 @@
 ---
 description: Start a new change using the experimental artifact workflow (OPSX)
-argument-hint: command arguments
 ---
 
 Start a new change using the experimental artifact-driven approach.
