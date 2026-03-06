@@ -18,12 +18,16 @@ Each custom schema folder SHALL include documentation that explains intended use
 - **WHEN** a coding agent reads a schema folder README
 - **THEN** it can determine whether the schema fits and can instruct the user to set `schema: <schema-name>` in `openspec/config.yaml`
 
-### Requirement: Repository root SHALL provide catalog and agent install guidance
-The repository root SHALL include a `README.md` that explains the purpose of this schema collection and includes a single-line copy-paste install command parameterized by repository URL and schema name.
+### Requirement: Repository root SHALL provide catalog and install guidance for humans and agents
+The repository root SHALL include a `README.md` that explains the purpose of this schema collection, starts the main install section with an agent-oriented prompt handoff, gives a self-install fallback for human readers, and includes a dedicated agent-oriented install flow that removes ambiguity about prerequisites and copying the full schema folder.
 
-#### Scenario: Agent discovers schema options from repo root
+#### Scenario: Human discovers schema options from repo root
+- **WHEN** a human user opens the repository root `README.md`
+- **THEN** they can find a self-install fallback that explains where schema folders are copied, how a schema is activated in `openspec/config.yaml`, and how to validate the install
+
+#### Scenario: Agent discovers deterministic install flow from repo root
 - **WHEN** a coding agent opens the repository root `README.md`
-- **THEN** it can understand the repository purpose and run one install command with `REPO_URL` and `SCHEMA` arguments
+- **THEN** it can find a top-level prompt handoff plus a dedicated agent-oriented install section that starts with prerequisite checks, explains the early-exit behavior, and tells it to copy the full schema directory recursively
 
 ### Requirement: Schema changes SHALL be validated with OpenSpec CLI
 Any new schema or schema modification in this repository SHALL be verified by running `openspec schema validate <schema-name>` before considering the change complete.

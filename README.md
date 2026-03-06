@@ -4,6 +4,54 @@ Custom [OpenSpec](https://github.com/Fission-AI/OpenSpec) schemas packaged as co
 
 Default OpenSpec includes the `spec-driven` schema, which is a strong general-purpose workflow. This repo adds more focused workflows for specific delivery contexts, and also demonstrates how to customise OpenSpec for different styles of work.
 
+## Install a Schema
+
+Ask your coding agent to read this file and install the schema you want:
+
+```text
+Read this file: https://raw.githubusercontent.com/intent-driven-dev/openspec-schemas/refs/heads/main/README.md and install schema <schema-name>.
+```
+
+Example:
+
+```text
+Read this file: https://raw.githubusercontent.com/intent-driven-dev/openspec-schemas/refs/heads/main/README.md and install schema event-driven.
+```
+
+If you prefer to install the schema yourself, copy the schema folder you want from `https://github.com/intent-driven-dev/openspec-schemas/tree/main/openspec/schemas` into one of these locations:
+
+1. Project Local:
+Create `openspec/schemas/` in your project if it does not exist, then copy your schema to `openspec/schemas/<schema-name>/`.
+
+2. User Level:
+Copy your schema to `$HOME/.openspec/schemas/<schema-name>/`.
+
+Once the schema exists in either location, update `openspec/config.yaml` to activate it and run `openspec schema validate`.
+
+`config.yaml` guidance:
+- Set `schema: <schema-name>`.
+- Ensure `rules` keys correspond to artifact IDs in your schema's `schema.yaml` (`artifacts[].id`).
+- For example, when using `minimalist`, artifacts are `specs` and `tasks`, so use `rules.specs` and `rules.tasks`.
+
+### Example: minimalist
+
+```yaml
+schema: minimalist
+
+context: |
+ Tech Stack:
+  - Pure HTML5, CSS3, vanilla JavaScript
+  - No build tools, package managers
+
+rules:
+  specs:
+    - Note accessibility requirements (WCAG 2.1 AA)
+  tasks:
+    - Include responsiveness checks.
+```
+
+Artifact alignment source: `openspec/schemas/minimalist/schema.yaml` (`specs`, `tasks`).
+
 ## AI Agent Install Instructions
 
 Use this flow when installing any schema from this repository into an existing OpenSpec project.
@@ -51,42 +99,6 @@ See `CONTRIBUTING.md` for how to create/customize schemas using `openspec schema
 ## Video
 
 [![Watch on YouTube](https://img.youtube.com/vi/k01nbZfwB34/0.jpg)](https://www.youtube.com/watch?v=k01nbZfwB34)
-
-## Install a Schema
-
-Copy the schema folder you want from `https://github.com/intent-driven-dev/openspec-schemas/openspec/schemas` into one of these locations:
-
-1. Project Local:
-Create `openspec/schemas/` in your project (if it does not exist), then copy your schema to `openspec/schemas/<schema-name>/`.
-
-2. User Level:
-Copy your schema to `$HOME/.openspec/schemas/<schema-name>/`.
-
-Once the schema exists in either location, update `openspec/config.yaml` to activate it.
-
-`config.yaml` guidance:
-- Set `schema: <schema-name>`.
-- Ensure `rules` keys correspond to artifact IDs in your schema's `schema.yaml` (`artifacts[].id`).
-- For example, when using `minimalist`, artifacts are `specs` and `tasks`, so use `rules.specs` and `rules.tasks`.
-
-### Example: minimalist
-
-```yaml
-schema: minimalist
-
-context: |
- Tech Stack:
-  - Pure HTML5, CSS3, vanilla JavaScript
-  - No build tools, package managers
-
-rules:
-  specs:
-    - Note accessibility requirements (WCAG 2.1 AA)
-  tasks:
-    - Include responsiveness checks.
-```
-
-Artifact alignment source: `openspec/schemas/minimalist/schema.yaml` (`specs`, `tasks`).
 
 ## Minimalist
 
