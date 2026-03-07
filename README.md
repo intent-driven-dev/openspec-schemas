@@ -18,7 +18,7 @@ Example:
 Read this file: https://raw.githubusercontent.com/intent-driven-dev/openspec-schemas/refs/heads/main/README.md and install schema event-driven.
 ```
 
-If you prefer to install the schema yourself, copy the schema folder you want from `https://github.com/intent-driven-dev/openspec-schemas/tree/main/openspec/schemas` into one of these locations:
+If you prefer to install the schema yourself, clone this repository locally or otherwise download it locally, then copy the relevant schema folder from `openspec/schemas/` into one of these locations:
 
 1. Project Local:
 Create `openspec/schemas/` in your project if it does not exist, then copy your schema to `openspec/schemas/<schema-name>/`.
@@ -56,9 +56,9 @@ Artifact alignment source: `openspec/schemas/minimalist/schema.yaml` (`specs`, `
 
 Use this flow when installing any schema from this repository into an existing OpenSpec project.
 
-1. Run `openspec --version` before fetching or copying any schema files. Confirm OpenSpec is installed and the CLI version is at least `1.0.0`.
+1. Run `openspec --version` before cloning or copying any schema files. Confirm OpenSpec is installed and the CLI version is at least `1.0.0`.
 2. If `openspec --version` fails, reports a version below `1.0.0`, or `openspec/config.yaml` is missing in the target project, stop and ask the user to install or upgrade OpenSpec and run `openspec init` first. Exit with a message that schema installation can only proceed after initialization.
-3. Copy the full schema directory recursively so you keep `schema.yaml`, the schema `README.md`, and all nested `templates/` files together.
+3. Clone this repository locally, then copy the full schema directory recursively so you keep `schema.yaml`, the schema `README.md`, and all nested `templates/` files together.
 4. Update `openspec/config.yaml` to activate the installed schema.
 5. Run `openspec schema validate` to confirm the copied schema loads correctly.
 
@@ -68,7 +68,8 @@ Example install flow using `event-driven`:
 openspec --version
 
 # Stop here if OpenSpec is missing, below 1.0.0, or openspec/config.yaml does not exist yet.
-cp -R ./openspec/schemas/event-driven ./your-project/openspec/schemas/event-driven
+git clone https://github.com/intent-driven-dev/openspec-schemas.git /tmp/openspec-schemas
+cp -R /tmp/openspec-schemas/openspec/schemas/event-driven ./your-project/openspec/schemas/event-driven
 ```
 
 Example activation in `openspec/config.yaml`:
