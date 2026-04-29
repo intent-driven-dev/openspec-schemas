@@ -112,3 +112,13 @@ For more details, see `openspec/schemas/minimalist/README.md`.
 Structured workflow for event-centric systems with [Event Storming](https://en.wikipedia.org/wiki/Event_storming) discovery followed by [AsyncAPI](https://www.asyncapi.com/) specification.
 
 For more details, see `openspec/schemas/event-driven/README.md`.
+
+## Spec-Driven With ADR
+
+Experimental proposal-to-tasks workflow for changes that also need durable
+Architecture Decision Records persisted under the target repository's top-level
+`adr/` folder.
+
+Based on OpenSpec PR: https://github.com/Fission-AI/OpenSpec/pull/1020
+
+For more details, see `openspec/schemas/spec-driven-with-adr/README.md`.

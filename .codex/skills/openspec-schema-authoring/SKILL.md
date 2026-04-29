@@ -66,6 +66,9 @@ Create or customize an OpenSpec workflow schema in this repository.
    openspec schema validate <schema-name>
    ```
 
+   This is the supported schema quality gate for OpenSpec CLI 1.3.1. Do not
+   use `openspec schema review`; that command is not available in this CLI.
+
 7. **Debug schema resolution if behavior is unexpected**
 
    ```bash
