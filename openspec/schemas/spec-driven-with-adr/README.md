@@ -7,6 +7,11 @@ Status: experimental.
 
 Based on OpenSpec PR: https://github.com/Fission-AI/OpenSpec/pull/1020
 
+Key references:
+- Article: https://intent-driven.dev/blog/2026/04/29/spec-driven-development-with-adr/
+
+[![Spec-Driven Development with ADR](https://img.youtube.com/vi/y5oemaPsmOA/hqdefault.jpg)](https://youtu.be/y5oemaPsmOA)
+
 - Good fit: architectural changes, platform decisions, cross-module work, new
   service boundaries, technology choices, or changes where future contributors
   need a persistent decision trail.
