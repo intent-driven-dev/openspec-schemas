@@ -6,7 +6,7 @@ compatibility: Requires openspec CLI.
 metadata:
   author: openspec
   version: "1.0"
-  generatedBy: "1.0.0"
+  generatedBy: "1.3.1"
 ---
 
 Verify that an implementation matches the change artifacts (specs, tasks, design).
@@ -30,7 +30,7 @@ Verify that an implementation matches the change artifacts (specs, tasks, design
    openspec status --change "<name>" --json
    ```
    Parse the JSON to understand:
-   - `schemaName`: The workflow being used (e.g., "spec-driven", "tdd")
+   - `schemaName`: The workflow being used (e.g., "spec-driven")
    - Which artifacts exist for this change
 
 3. **Get the change directory and load artifacts**
@@ -39,7 +39,7 @@ Verify that an implementation matches the change artifacts (specs, tasks, design
    openspec instructions apply --change "<name>" --json
    ```
 
-   This returns the change directory and context files. Read all available artifacts from `contextFiles`.
+   This returns the change directory and `contextFiles` (artifact ID -> array of concrete file paths). Read all available artifacts from `contextFiles`.
 
 4. **Initialize verification report structure**
 
@@ -53,7 +53,7 @@ Verify that an implementation matches the change artifacts (specs, tasks, design
 5. **Verify Completeness**
 
    **Task Completion**:
-   - If tasks.md exists in contextFiles, read it
+   - If `contextFiles.tasks` exists, read every file path in it
    - Parse checkboxes: `- [ ]` (incomplete) vs `- [x]` (complete)
    - Count complete vs total tasks
    - If incomplete tasks exist:
@@ -92,7 +92,7 @@ Verify that an implementation matches the change artifacts (specs, tasks, design
 7. **Verify Coherence**
 
    **Design Adherence**:
-   - If design.md exists in contextFiles:
+   - If `contextFiles.design` exists:
      - Extract key decisions (look for sections like "Decision:", "Approach:", "Architecture:")
      - Verify implementation follows those decisions
      - If contradiction detected:

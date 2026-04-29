@@ -4,7 +4,7 @@ description: Continue working on a change - create the next artifact (Experiment
 
 Continue working on a change by creating the next artifact.
 
-**Input**: Optionally specify a change name after `/opsx:continue` (e.g., `/opsx:continue add-auth`). If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
+**Input**: Optionally specify a change name after `/opsx-continue` (e.g., `/opsx-continue add-auth`). If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
 
 **Steps**
 
@@ -27,7 +27,7 @@ Continue working on a change by creating the next artifact.
    openspec status --change "<name>" --json
    ```
    Parse the JSON to understand current state. The response includes:
-   - `schemaName`: The workflow schema being used (e.g., "spec-driven", "tdd")
+   - `schemaName`: The workflow schema being used (e.g., "spec-driven")
    - `artifacts`: Array of artifacts with their status ("done", "ready", "blocked")
    - `isComplete`: Boolean indicating if all artifacts are complete
 
@@ -38,7 +38,7 @@ Continue working on a change by creating the next artifact.
    **If all artifacts are complete (`isComplete: true`)**:
    - Congratulate the user
    - Show final status including the schema used
-   - Suggest: "All artifacts created! You can now implement this change or archive it."
+   - Suggest: "All artifacts created! You can now implement this change with `/opsx-apply` or archive it with `/opsx-archive`."
    - STOP
 
    ---
@@ -82,7 +82,7 @@ After each invocation, show:
 - Schema workflow being used
 - Current progress (N/M complete)
 - What artifacts are now unlocked
-- Prompt: "Run `/opsx:continue` to create the next artifact"
+- Prompt: "Run `/opsx-continue` to create the next artifact"
 
 **Artifact Creation Guidelines**
 
@@ -93,15 +93,9 @@ Common artifact patterns:
 **spec-driven schema** (proposal → specs → design → tasks):
 - **proposal.md**: Ask user about the change if not clear. Fill in Why, What Changes, Capabilities, Impact.
   - The Capabilities section is critical - each capability listed will need a spec file.
-- **specs/*.md**: Create one spec per capability listed in the proposal.
+- **specs/<capability>/spec.md**: Create one spec per capability listed in the proposal's Capabilities section (use the capability name, not the change name).
 - **design.md**: Document technical decisions, architecture, and implementation approach.
 - **tasks.md**: Break down implementation into checkboxed tasks.
-
-**tdd schema** (spec → tests → implementation → docs):
-- **spec.md**: Feature specification defining what to build.
-- **tests/*.test.ts**: Write tests BEFORE implementation (TDD red phase).
-- **src/*.ts**: Implement to make tests pass (TDD green phase).
-- **docs/*.md**: Document the implemented feature.
 
 For other schemas, follow the `instruction` field from the CLI output.
 
