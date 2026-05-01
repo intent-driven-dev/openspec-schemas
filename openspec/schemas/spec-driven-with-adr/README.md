@@ -3,10 +3,6 @@
 `spec-driven-with-adr` is for changes that need the standard proposal-to-tasks
 OpenSpec flow plus durable Architecture Decision Records.
 
-Status: experimental.
-
-Based on OpenSpec PR: https://github.com/Fission-AI/OpenSpec/pull/1020
-
 Key references:
 - Article: https://intent-driven.dev/blog/2026/04/29/spec-driven-development-with-adr/
 
@@ -49,5 +45,11 @@ ADR files are generated under the target repository's top-level `adr/` folder,
 not only inside the OpenSpec change folder. Accepted ADRs are immutable. If a
 future decision changes a prior ADR, create a new ADR that supersedes the old
 one and leave the original file unchanged.
+
+## Pending Work
+
+- Add an ADR-focused Codex/OpenSpec skill for working with ADR artifacts.
+- Add install-time support for choosing the ADR style/template used by this
+  schema.
 
 For more schemas, refer to https://github.com/intent-driven-dev/openspec-schemas.
