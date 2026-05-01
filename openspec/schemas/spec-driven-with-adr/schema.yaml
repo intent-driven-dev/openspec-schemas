@@ -204,13 +204,16 @@ artifacts:
     requires:
       - proposal
   - id: adr
-    folder: adr
     generates: "*.md"
     description: Architecture Decision Records distilled from design for future reference
     template: adr.md
     instruction: >
       Distill significant decisions from design.md into Architecture Decision
-      Records that live in <repo>/adr/ and persist across changes.
+      Records that live in <repo>/adr/ and persist across changes. The path
+      <repo>/adr/ means the target repository's top-level adr/ folder beside
+      openspec/, not any folder inside openspec/. ADR files MUST be written
+      outside openspec/ and MUST NOT be written under
+      openspec/changes/<change>/.
 
 
       IRON RULE — ADRs are immutable once accepted. You MUST NOT edit a prior
