@@ -1,8 +1,8 @@
 ## 1. Fork Baseline Schema
 
-- [ ] 1.1 Run `openspec schema fork spec-driven linearized` to create `openspec/schemas/linearized/` from the built-in `spec-driven` schema.
-- [ ] 1.2 Inspect the forked `schema.yaml` and templates to confirm proposal, specs, design, tasks, and apply tracking match the baseline `spec-driven` workflow.
-- [ ] 1.3 Rename schema metadata to `linearized` and keep the schema package self-contained under `openspec/schemas/linearized/`.
+- [x] 1.1 Run `openspec schema fork spec-driven linearized` to create `openspec/schemas/linearized/` from the built-in `spec-driven` schema.
+- [x] 1.2 Inspect the forked `schema.yaml` and templates to confirm proposal, specs, design, tasks, and apply tracking match the baseline `spec-driven` workflow.
+- [x] 1.3 Rename schema metadata to `linearized` and keep the schema package self-contained under `openspec/schemas/linearized/`.
 - [ ] 1.4 Commit the baseline fork and metadata rename.
 
 ## 2. Add Linear Setup And Proposal Flow
