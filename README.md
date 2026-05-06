@@ -113,6 +113,28 @@ Structured workflow for event-centric systems with [Event Storming](https://en.w
 
 For more details, see `openspec/schemas/event-driven/README.md`.
 
+## Linearized
+
+Spec-driven workflow for teams that coordinate work in Linear while keeping
+OpenSpec specs as the source of truth. It starts changes from Linear stories,
+stores project setup in `openspec/linear.yaml`, records `linear_story_id` in
+proposal frontmatter, and mirrors canonical specs to Linear Project Documents
+after archive when Linear MCP is available.
+
+Activation:
+
+```yaml
+schema: linearized
+```
+
+Validate:
+
+```bash
+openspec schema validate linearized
+```
+
+For more details, see `openspec/schemas/linearized/README.md`.
+
 ## Spec-Driven With ADR
 
 Experimental proposal-to-tasks workflow for changes that also need durable
