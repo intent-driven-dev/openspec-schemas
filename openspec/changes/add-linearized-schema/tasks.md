@@ -12,7 +12,7 @@
 - [x] 2.3 Update the proposal template with frontmatter slots for `linear_story_id` and useful Linear display metadata.
 - [x] 2.4 Add proposal instructions for selecting a configured-project Backlog issue, transitioning it to Todo when possible, and recording `linear_story_id`.
 - [x] 2.5 Add graceful-degradation language so proposal creation continues locally when Linear MCP is unavailable after setup exists.
-- [ ] 2.6 Commit the Linear setup and proposal-flow changes.
+- [x] 2.6 Commit the Linear setup and proposal-flow changes.
 
 ## 3. Add Apply And Task Guidance
 
@@ -21,7 +21,7 @@
 - [x] 3.3 Update task artifact instructions to require small dependency-ordered checkbox tasks and a final verification/archive-readiness group.
 - [x] 3.4 Update the tasks template so generated task lists include best-effort Linear story completion before archive.
 - [x] 3.5 Ensure Linear update failures are documented as non-blocking for apply and task completion.
-- [ ] 3.6 Commit the apply and task-guidance changes.
+- [x] 3.6 Commit the apply and task-guidance changes.
 
 ## 4. Add Archive-Time Project Document Sync Guidance
 
@@ -30,20 +30,20 @@
 - [x] 4.3 Define the document upsert sequence: use stored document ID or slug from `openspec/linear.yaml`, otherwise match by deterministic title, otherwise create a project-scoped document.
 - [x] 4.4 Persist newly discovered or created Linear document IDs back into `openspec/linear.yaml` when possible.
 - [x] 4.5 Keep generic non-document Linear project resources explicitly out of scope.
-- [ ] 4.6 Commit the archive-time Project Document sync guidance.
+- [x] 4.6 Commit the archive-time Project Document sync guidance.
 
 ## 5. Add Documentation And Catalog Entries
 
 - [x] 5.1 Create `openspec/schemas/linearized/README.md` with purpose, suitable and unsuitable use cases, install and activation guidance, workflow sequence, Linear setup, graceful degradation, and archive document sync behavior.
 - [x] 5.2 Update the repository root `README.md` to list `linearized` in the schema catalog and point to `openspec/schemas/linearized/README.md`.
 - [x] 5.3 Ensure README examples use `openspec/linear.yaml`, `schema: linearized`, and `openspec schema validate linearized` consistently.
-- [ ] 5.4 Commit the documentation and catalog updates.
+- [x] 5.4 Commit the documentation and catalog updates.
 
 ## 6. Verify Schema And Smoke Behavior
 
-- [ ] 6.1 Run `openspec schema validate linearized` and fix any schema or template issues.
-- [ ] 6.2 Smoke check `openspec new change <name> --schema linearized` creates the expected first artifact instructions.
-- [ ] 6.3 Smoke check proposal, apply, and tasks instructions mention Linear setup, `linear_story_id`, best-effort Linear updates, and Linear-disabled fallback behavior.
-- [ ] 6.4 Smoke check archive guidance mentions post-archive canonical spec mirroring to Linear Project Documents and does not imply generic resource sync.
-- [ ] 6.5 Run `openspec validate add-linearized-schema --strict` after implementation changes.
-- [ ] 6.6 Commit final verification fixes, if any.
+- [x] 6.1 Run `openspec schema validate linearized` and fix any schema or template issues.
+- [x] 6.2 Smoke check `openspec new change <name> --schema linearized` creates the expected first artifact instructions.
+- [x] 6.3 Smoke check proposal, apply, and tasks instructions mention Linear setup, `linear_story_id`, best-effort Linear updates, and Linear-disabled fallback behavior.
+- [x] 6.4 Smoke check archive guidance mentions post-archive canonical spec mirroring to Linear Project Documents and does not imply generic resource sync.
+- [x] 6.5 Run `openspec validate add-linearized-schema --strict` after implementation changes.
+- [x] 6.6 Commit final verification fixes, if any.
