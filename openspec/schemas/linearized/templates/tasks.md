@@ -12,5 +12,4 @@
 
 - [ ] 3.1 Run relevant tests and `openspec validate <change> --strict`.
 - [ ] 3.2 If this change modifies `openspec/schemas/linearized/`, run `openspec schema validate linearized`.
-- [ ] 3.3 Complete the bound Linear story when possible; skip silently if Linear MCP is unavailable.
-- [ ] 3.4 After OpenSpec archive merges delta specs into canonical `openspec/specs/`, mirror changed canonical specs to Linear Project Documents when possible.
+- [ ] 3.3 Confirm the change is ready for OpenSpec archive.

@@ -107,17 +107,31 @@ linear_project:
 When Linear MCP is available, proposal creation should select a Backlog issue
 for the configured team and project, apply the optional issue label filter to
 candidate selection, transition the issue to Todo when possible, and record
-`linear_story_id`.
+`linear_story_id`. The agent should add a Linear comment in at most two
+sentences summarizing that OpenSpec proposal discovery started and the story was
+linked.
+
+The selected Linear story is discovery input, not an already-complete OpenSpec
+proposal. Agents should read available story title, description, labels,
+comments, links, and related context, then ask the contributor proposal-style
+clarifying questions before writing `proposal.md`. The questions should cover
+business cases, target users, scope, architecture, tech stack, constraints,
+integrations, risks, acceptance criteria, and affected capabilities.
 
 ## Apply Behavior
 
 During apply, agents read `linear_story_id` from `proposal.md`. When Linear MCP
 is available, they should sync useful proposal content to the Linear story and
-transition Todo to In Progress when possible. These updates are best-effort:
-implementation continues through `tasks.md` even when Linear is unavailable.
+transition Todo to In Progress when possible. The transition should include a
+Linear comment in at most two sentences summarizing that implementation began
+from the OpenSpec change and tracked tasks are being applied. These updates are
+best-effort: implementation continues through `tasks.md` even when Linear is
+unavailable.
 
 Generated task lists should include small dependency-ordered checkboxes and a
-final verification/archive-readiness group. For schema changes, include:
+final verification/archive-readiness group. They should not include
+post-archive Linear Project Document sync checkboxes; archive-time sync guidance
+lives in `proposal.md`. For schema changes, include:
 
 ```bash
 openspec schema validate linearized
@@ -128,8 +142,10 @@ openspec schema validate linearized
 OpenSpec canonical specs under `openspec/specs/` are the source of truth. Linear
 Project Documents are mirrors.
 
-Run document sync only after OpenSpec archive merges delta specs into canonical
-spec files. The recommended upsert sequence is:
+The proposal template includes a preserved Linear Archive Guidance section.
+Archive-time agents should use that section when a proposal is being archived.
+Run document sync only after OpenSpec archive succeeds and merges delta specs
+into canonical spec files. The recommended upsert sequence is:
 
 1. Use a stored document ID or slug from `openspec/linear.yaml`.
 2. Otherwise, look for an existing project document with deterministic title
@@ -141,3 +157,9 @@ spec files. The recommended upsert sequence is:
 
 Only Linear Project Documents are in scope. Generic non-document Linear project
 resources are explicitly out of scope.
+
+Do not transition the bound Linear story to Done during apply or task
+completion. After successful OpenSpec archive and best-effort document sync,
+transition the story to Done when possible and add a Linear comment in at most
+two sentences summarizing that archive completed and canonical specs or mirrors
+were handled.

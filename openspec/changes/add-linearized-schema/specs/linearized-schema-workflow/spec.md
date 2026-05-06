@@ -44,7 +44,16 @@ The `linearized` proposal flow SHALL guide agents to select a Linear Backlog iss
 - **WHEN** the proposal artifact is created
 - **THEN** the schema instructions require the agent to select a Linear Backlog issue for the configured project context
 - **AND** transition the selected issue to Todo when possible
+- **AND** add a Linear comment in at most two sentences summarizing that OpenSpec proposal discovery started and the story was linked
 - **AND** record `linear_story_id` in `proposal.md` frontmatter.
+
+#### Scenario: Proposal discovery starts from Linear story content
+- **GIVEN** Linear MCP is available
+- **AND** the agent selects a configured-project Linear story
+- **WHEN** the proposal artifact is created
+- **THEN** the schema instructions require the agent to read available story content as initial OpenSpec proposal input
+- **AND** ask the contributor clarifying questions about business cases, scope, architecture, tech stack, constraints, integrations, risks, acceptance criteria, and affected capabilities
+- **AND** avoid treating the Linear story content as an already-complete OpenSpec proposal.
 
 #### Scenario: Proposal continues when Linear is unavailable after setup
 - **GIVEN** `openspec/linear.yaml` exists
@@ -62,6 +71,7 @@ The `linearized` schema SHALL use `apply.instruction` with `apply.tracks: tasks.
 - **WHEN** apply begins
 - **THEN** the schema apply instructions require the agent to sync useful proposal content to the Linear story when possible
 - **AND** transition Todo to In Progress when possible
+- **AND** add a Linear comment in at most two sentences summarizing that implementation began from the OpenSpec change and tracked tasks are being applied
 - **AND** work through tracked checkboxes in `tasks.md`.
 
 #### Scenario: Apply remains local when Linear updates fail
@@ -71,20 +81,27 @@ The `linearized` schema SHALL use `apply.instruction` with `apply.tracks: tasks.
 - **THEN** the schema apply instructions require implementation to continue from `tasks.md`
 - **AND** require failed Linear updates to remain non-blocking.
 
-### Requirement: Linearized tasks SHALL include archive-readiness and Linear close guidance
-The `linearized` task guidance SHALL require a final task group for verification, Linear story completion, and archive readiness.
+### Requirement: Linearized tasks SHALL include verifiable archive-readiness guidance
+The `linearized` task guidance SHALL require a final task group for implementation verification and archive readiness without making post-archive Linear resource sync part of `tasks.md`.
 
-#### Scenario: Tasks include final Linear close step
+#### Scenario: Tasks avoid post-archive Linear resource sync checkboxes
 - **WHEN** `tasks.md` is created for a `linearized` change
-- **THEN** it includes a final checkbox group that completes the Linear story when possible before archive
-- **AND** keeps the step best-effort when Linear MCP is unavailable.
+- **THEN** it includes implementation verification and archive-readiness checkboxes
+- **AND** does not include post-archive Linear Project Document sync checkboxes
+- **AND** does not include a checkbox to transition the Linear story to Done.
 
 #### Scenario: Tasks include schema validation verification
 - **WHEN** `tasks.md` is created for implementation that changes `openspec/schemas/linearized/`
 - **THEN** it requires `openspec schema validate linearized` before the change is considered complete.
 
-### Requirement: Linearized archive guidance SHALL mirror canonical specs to Linear Project Documents
-The `linearized` schema documentation and task guidance SHALL define optional post-archive mirroring from canonical OpenSpec specs to Linear Project Documents.
+### Requirement: Linearized proposal SHALL preserve archive guidance for Linear Project Document mirrors
+The `linearized` proposal template and schema documentation SHALL preserve optional archive-time guidance for mirroring canonical OpenSpec specs to Linear Project Documents.
+
+#### Scenario: Proposal contains preserved archive guidance
+- **WHEN** `proposal.md` is created for a `linearized` change
+- **THEN** it contains schema-provided Linear archive guidance that agents preserve unless the schema changes
+- **AND** the guidance states OpenSpec canonical specs are the source of truth
+- **AND** the guidance states Linear Project Documents are mirrors.
 
 #### Scenario: Archive sync mirrors canonical specs after OpenSpec archive
 - **GIVEN** OpenSpec archive has merged changed delta specs into canonical files under `openspec/specs/`
@@ -104,6 +121,14 @@ The `linearized` schema documentation and task guidance SHALL define optional po
 - **WHEN** post-archive Linear sync runs
 - **THEN** the schema guidance targets Linear Project Documents only
 - **AND** does not require creating or updating generic non-document Linear project resources.
+
+#### Scenario: Linear story is completed only after archive
+- **GIVEN** a `linearized` change has a bound Linear story
+- **AND** OpenSpec archive succeeds for the associated change
+- **WHEN** archive-time Linear updates run
+- **THEN** the schema guidance allows the agent to transition the Linear story to Done when possible
+- **AND** add a Linear comment in at most two sentences summarizing that archive completed and canonical specs or mirrors were handled
+- **AND** forbids transitioning the story to Done before OpenSpec archive succeeds.
 
 ### Requirement: Linearized schema SHALL validate cleanly
 Changes adding or modifying `openspec/schemas/linearized/` SHALL pass OpenSpec schema validation before completion.

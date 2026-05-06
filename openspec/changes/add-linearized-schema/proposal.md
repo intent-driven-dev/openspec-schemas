@@ -15,10 +15,12 @@ The schema should be packaged as `linearized` so consumer projects can copy one 
 - Define best-effort Linear behavior after first-time setup:
   - if Linear MCP is unavailable after `openspec/linear.yaml` exists, Linear updates are skipped silently and OpenSpec continues;
   - apply reads `linear_story_id`, syncs proposal content to the Linear story when possible, transitions Todo to In Progress when possible, then works tasks;
-  - tasks include a final close group that completes the Linear story when possible before archive.
+  - lifecycle transitions add short Linear comments when possible;
+  - the Linear story moves to Done only after successful OpenSpec archive.
 - Remove the earlier Epic-based synchronization idea from scope. Linear issues track work; OpenSpec archive remains responsible for merging specs into canonical project specs.
 - Define Linear Project Document sync as an optional archive-time behavior:
   - OpenSpec's canonical project specs remain the source of truth;
+  - the proposal template preserves archive sync guidance for agents;
   - when Linear MCP is available, archive may create or update project-scoped Linear documents under project resources from those canonical specs;
   - when Linear MCP is unavailable, archive remains local OpenSpec-only and skips document sync silently.
 - Add templates for `proposal.md`, `spec.md`, `design.md`, and `tasks.md`, including frontmatter slots needed by the workflow.

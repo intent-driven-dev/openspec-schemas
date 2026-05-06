@@ -47,3 +47,19 @@
 - [x] 6.4 Smoke check archive guidance mentions post-archive canonical spec mirroring to Linear Project Documents and does not imply generic resource sync.
 - [x] 6.5 Run `openspec validate add-linearized-schema --strict` after implementation changes.
 - [x] 6.6 Commit final verification fixes, if any.
+
+## 7. Treat Linear Story As Proposal Input
+
+- [x] 7.1 Add requirement coverage that selected Linear story contents seed proposal discovery and require user clarification.
+- [x] 7.2 Update proposal instructions to read story content and ask about business cases, scope, architecture, tech stack, constraints, integrations, risks, acceptance criteria, and affected capabilities.
+- [x] 7.3 Document in the schema README that Linear stories are discovery input, not complete OpenSpec proposals.
+- [x] 7.4 Re-run schema validation, instruction smoke checks, and strict change validation.
+
+## 8. Move Archive Sync Out Of Tasks And Tighten Linear Lifecycle
+
+- [x] 8.1 Remove post-archive Linear Project Document sync checkboxes from generated task instructions and template.
+- [x] 8.2 Add preserved Linear archive guidance to the proposal template.
+- [x] 8.3 Update proposal, apply, and archive guidance so Linear comments are at most two sentences at each transition.
+- [x] 8.4 Ensure Linear stories move to Done only after successful OpenSpec archive.
+- [x] 8.5 Update schema README and delta specs for proposal-carried archive guidance and task verification compatibility.
+- [x] 8.6 Update proposal and design artifacts to remove stale task-based archive sync guidance.

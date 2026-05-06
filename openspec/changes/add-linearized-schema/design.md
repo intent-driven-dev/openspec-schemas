@@ -100,7 +100,7 @@ Alternatives considered:
 
 ### Decision: Treat Linear issue updates as best-effort lifecycle mirrors
 
-After setup exists, Linear updates should not block OpenSpec progress. The schema will use `apply.instruction` for apply-specific guidance: read `linear_story_id`, sync proposal content to the Linear story description when possible, transition Todo to In Progress when possible, then work through tracked tasks.
+After setup exists, Linear updates should not block OpenSpec progress. The schema will use `apply.instruction` for apply-specific guidance: read `linear_story_id`, sync proposal content to the Linear story description when possible, transition Todo to In Progress when possible with a short comment, then work through tracked tasks.
 
 The schema will still use the standard apply tracking contract:
 
@@ -113,7 +113,7 @@ apply:
     ...
 ```
 
-Tasks will include a final close group that completes the Linear story when possible before archive.
+The Linear story must not move to Done during apply or task completion. It moves to Done only after OpenSpec archive succeeds for the associated change, with a short comment summarizing archive completion.
 
 Rationale: Linear should reflect delivery progress, but the OpenSpec workflow must remain usable offline or in environments without Linear MCP.
 
@@ -126,18 +126,18 @@ Alternatives considered:
 
 OpenSpec specs under `openspec/specs/` remain canonical. After archive merges delta specs into canonical specs, an agent may mirror changed canonical spec files into Linear Project Documents when Linear MCP is available.
 
-OpenSpec schemas do not currently provide a first-class `archive` instruction section equivalent to `apply.instruction`. The archive sync contract will therefore be baked into:
+OpenSpec schemas do not currently provide a first-class `archive` instruction section equivalent to `apply.instruction`. The archive sync contract will therefore be preserved in `proposal.md` and documented in the schema README, rather than emitted as implementation task checkboxes that would affect apply verification.
 
-- the `tasks` artifact instruction, which requires a final archive-readiness group;
-- the `tasks.md` template, which includes checkboxes for Linear story completion and post-archive Project Document sync;
+- the `proposal.md` template, which contains preserved Linear archive guidance for agents;
 - the schema README, which documents the archive sequence for agents.
 
 The archive sequence should be:
 
 1. Complete implementation tasks.
-2. Complete the Linear story when possible.
+2. Complete implementation and verification tasks without moving the Linear story to Done.
 3. Run OpenSpec archive so delta specs merge into canonical `openspec/specs/`.
-4. After archive, mirror changed canonical specs into Linear Project Documents when possible.
+4. After successful archive, mirror changed canonical specs into Linear Project Documents when possible.
+5. Transition the Linear story to Done when possible and add a short comment summarizing the archive outcome.
 
 Document sync should use this upsert order:
 
