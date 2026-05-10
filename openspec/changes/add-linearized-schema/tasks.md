@@ -63,3 +63,18 @@
 - [x] 8.4 Ensure Linear stories move to Done only after successful OpenSpec archive.
 - [x] 8.5 Update schema README and delta specs for proposal-carried archive guidance and task verification compatibility.
 - [x] 8.6 Update proposal and design artifacts to remove stale task-based archive sync guidance.
+
+## 9. Immediate Linear Setup And Stronger Spec Mirror Guidance
+
+- [x] 9.1 Require immediate Linear setup when `openspec/linear.yaml` is missing before story selection or proposal discovery.
+- [x] 9.2 Make the next user-facing question after setup be which configured-project Backlog issue to pick.
+- [x] 9.3 Strengthen proposal archive guidance as non-negotiable schema-provided content.
+- [x] 9.4 Document that available Linear tools create project-scoped documents but do not expose project document folders.
+- [x] 9.5 Use deterministic `OpenSpec: <capability-name>` document titles as the controlled replacement boundary.
+
+## 10. Move Archive Policy To Config
+
+- [x] 10.1 Remove archive mirror policy from the proposal template.
+- [x] 10.2 Add non-negotiable Linear archive policy to schema install `config.yaml` guidance.
+- [x] 10.3 Change mirror document title convention to `OpenSpec: <capability-name>`.
+- [x] 10.4 Update change artifacts to describe config-carried archive policy instead of proposal-carried archive policy.

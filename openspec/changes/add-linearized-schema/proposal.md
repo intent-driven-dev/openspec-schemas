@@ -8,9 +8,10 @@ The schema should be packaged as `linearized` so consumer projects can copy one 
 
 - Add a self-contained `linearized` schema under `openspec/schemas/linearized/` by forking `spec-driven` and then updating schema YAML, templates, and README documentation where the Linearized workflow differs.
 - Define a Linear-guided proposal flow:
-  - first-time setup verifies Linear MCP connectivity, prompts for team and project, and writes `openspec/linear.yaml`;
+  - first-time setup happens immediately when `openspec/linear.yaml` is missing, verifies Linear MCP connectivity, prompts for team and project, and writes `openspec/linear.yaml`;
   - setup may optionally persist a Linear issue label filter so backlog selection only includes issues for the configured project context;
   - subsequent changes load `openspec/linear.yaml` silently;
+  - after first-time setup, the next user-facing question is which configured-project Backlog issue to pick;
   - proposal creation selects a Backlog story, transitions it to Todo, and records `linear_story_id` in proposal frontmatter.
 - Define best-effort Linear behavior after first-time setup:
   - if Linear MCP is unavailable after `openspec/linear.yaml` exists, Linear updates are skipped silently and OpenSpec continues;
@@ -20,8 +21,9 @@ The schema should be packaged as `linearized` so consumer projects can copy one 
 - Remove the earlier Epic-based synchronization idea from scope. Linear issues track work; OpenSpec archive remains responsible for merging specs into canonical project specs.
 - Define Linear Project Document sync as an optional archive-time behavior:
   - OpenSpec's canonical project specs remain the source of truth;
-  - the proposal template preserves archive sync guidance for agents;
+  - installation guidance adds non-negotiable archive sync policy to `openspec/config.yaml`;
   - when Linear MCP is available, archive may create or update project-scoped Linear documents under project resources from those canonical specs;
+  - document mirrors use deterministic `OpenSpec: <capability-name>` titles because available Linear tools do not create project document folders;
   - when Linear MCP is unavailable, archive remains local OpenSpec-only and skips document sync silently.
 - Add templates for `proposal.md`, `spec.md`, `design.md`, and `tasks.md`, including frontmatter slots needed by the workflow.
 - Document installation, opt-in, `openspec/linear.yaml`, frontmatter contracts, optional label filtering, graceful degradation, and optional Project Document sync.
