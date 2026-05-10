@@ -26,17 +26,19 @@ artifacts:
           name: "<optional-label-name>"
         archive_documents:
           enabled: true
+          title_prefix: "OpenSpec:"
           documents:
             "<capability-name>":
               document_id: "<linear-document-id-or-slug>"
               title: "OpenSpec: <capability-name>"
         ```
 
-      - If `openspec/linear.yaml` is missing, perform first-time setup:
+      - If `openspec/linear.yaml` is missing, stop normal proposal discovery and perform Linear setup immediately before asking any story-selection or proposal-content questions:
         1. Verify Linear MCP connectivity when the tools are available.
         2. Ask the contributor for the Linear team and project to use for this OpenSpec project.
         3. Optionally ask whether backlog selection should be narrowed by a single Linear issue label.
         4. Write the selected IDs and display names to `openspec/linear.yaml`.
+        5. After setup is written, the next user-facing question should be which configured-project Backlog issue to pick.
       - If first-time setup cannot verify Linear MCP, ask the contributor whether to continue locally without binding a story or pause until Linear is available.
       - After setup exists, Linear unavailability is non-blocking: skip Linear reads and updates silently and continue local OpenSpec proposal creation.
 
@@ -57,7 +59,6 @@ artifacts:
       - Transition the selected issue to Todo when possible and add a Linear comment of at most two sentences summarizing that OpenSpec proposal discovery started and the story was linked.
       - Record the selected story in proposal frontmatter, especially `linear_story_id`. Include useful display metadata such as title, identifier, URL, team, project, and current state when available.
       - If Linear is unavailable after setup exists, leave Linear frontmatter blank or null and continue locally.
-      - Preserve the template's Linear Archive Guidance section unless the schema itself changes. Archive-time agents use that section after successful OpenSpec archive.
 
       Proposal sections:
 
@@ -236,7 +237,7 @@ artifacts:
       - Keep tasks small, dependency ordered, and directly verifiable
       - Include verification tasks for relevant tests and `openspec validate <change> --strict`
       - If implementation changes `openspec/schemas/linearized/`, include `openspec schema validate linearized`
-      - Do not add post-archive Linear Project Document sync checkboxes to `tasks.md`; archive-time sync guidance lives in `proposal.md`
+      - Do not add post-archive Linear Project Document sync checkboxes to `tasks.md`; archive-time sync guidance belongs in `openspec/config.yaml` context/rules
 
       Example:
 
@@ -291,5 +292,6 @@ apply:
 
     - Do not transition the Linear story to Done during apply or task completion.
     - The Linear story moves to Done only after OpenSpec archive succeeds for the associated change.
-    - Archive-time agents should follow the preserved Linear Archive Guidance in `proposal.md` for Project Document mirroring and then transition the Linear story to Done when possible, with a Linear comment of at most two sentences summarizing that archive completed and canonical specs/resource mirrors were handled as applicable.
+    - Archive-time agents should follow the non-negotiable Linear archive guidance from `openspec/config.yaml` for Project Document mirroring and then transition the Linear story to Done when possible, with a Linear comment of at most two sentences summarizing that archive completed and canonical specs/resource mirrors were handled as applicable.
+    - Available Linear tools create project-scoped documents, not folders. Use the deterministic `OpenSpec: <capability-name>` document title namespace from `openspec/config.yaml` instead of relying on folder creation.
     - If Linear MCP is unavailable after setup exists, skip comments, transitions, and document sync silently.

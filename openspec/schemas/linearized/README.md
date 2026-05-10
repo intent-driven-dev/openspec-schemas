@@ -75,16 +75,19 @@ issue_label_filter:
   name: "<optional-label-name>"
 archive_documents:
   enabled: true
+  title_prefix: "OpenSpec:"
   documents:
     "<capability-name>":
       document_id: "<linear-document-id-or-slug>"
       title: "OpenSpec: <capability-name>"
 ```
 
-When this file exists, agents load it silently. When it is missing, agents
-should verify Linear MCP connectivity when possible, ask for the Linear team and
+When this file exists, agents load it silently. When it is missing, agents must
+perform Linear setup immediately before story selection or proposal discovery:
+verify Linear MCP connectivity when possible, ask for the Linear team and
 project, optionally ask for one issue label filter, and write the selected
-configuration to `openspec/linear.yaml`.
+configuration to `openspec/linear.yaml`. After setup is written, the next
+user-facing question should be which configured-project Backlog issue to pick.
 
 After `openspec/linear.yaml` exists, Linear availability is non-blocking. If
 Linear MCP is unavailable or a Linear update fails, agents continue the local
@@ -131,7 +134,7 @@ unavailable.
 Generated task lists should include small dependency-ordered checkboxes and a
 final verification/archive-readiness group. They should not include
 post-archive Linear Project Document sync checkboxes; archive-time sync guidance
-lives in `proposal.md`. For schema changes, include:
+belongs in `openspec/config.yaml`. For schema changes, include:
 
 ```bash
 openspec schema validate linearized
@@ -142,10 +145,25 @@ openspec schema validate linearized
 OpenSpec canonical specs under `openspec/specs/` are the source of truth. Linear
 Project Documents are mirrors.
 
-The proposal template includes a preserved Linear Archive Guidance section.
-Archive-time agents should use that section when a proposal is being archived.
-Run document sync only after OpenSpec archive succeeds and merges delta specs
-into canonical spec files. The recommended upsert sequence is:
+Add this non-negotiable guidance to `openspec/config.yaml` when installing the
+schema:
+
+```yaml
+schema: linearized
+
+context: |
+  Linearized archive policy:
+  - NON-NEGOTIABLE: OpenSpec canonical specs under `openspec/specs/` are the only source of truth.
+  - Linear Project Documents are disposable mirrors only. Generic non-document Linear project resources are out of scope.
+  - Run Linear Project Document sync only after OpenSpec archive succeeds and merges delta specs into canonical spec files.
+  - Mirror documents use deterministic titles: `OpenSpec: <capability-name>`.
+  - Available Linear tools create project-scoped documents, not folders. Use the `OpenSpec:` title namespace as the controlled replacement boundary.
+  - Because these documents are mirrors, archive-time agents may replace the full document body with canonical OpenSpec spec content.
+  - Do not transition the bound Linear story to Done before OpenSpec archive succeeds.
+```
+
+Archive-time agents should follow that config guidance. The recommended upsert
+sequence is:
 
 1. Use a stored document ID or slug from `openspec/linear.yaml`.
 2. Otherwise, look for an existing project document with deterministic title
@@ -156,7 +174,11 @@ into canonical spec files. The recommended upsert sequence is:
    possible.
 
 Only Linear Project Documents are in scope. Generic non-document Linear project
-resources are explicitly out of scope.
+resources are explicitly out of scope. The available Linear tools create
+project-scoped documents, not folders for project documents, so use the
+`OpenSpec:` title namespace as the controlled replacement boundary.
+Because these documents are mirrors, archive-time agents may replace the full
+document body with canonical OpenSpec spec content.
 
 Do not transition the bound Linear story to Done during apply or task
 completion. After successful OpenSpec archive and best-effort document sync,

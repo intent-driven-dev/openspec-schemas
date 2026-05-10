@@ -125,6 +125,16 @@ Activation:
 
 ```yaml
 schema: linearized
+
+context: |
+  Linearized archive policy:
+  - NON-NEGOTIABLE: OpenSpec canonical specs under `openspec/specs/` are the only source of truth.
+  - Linear Project Documents are disposable mirrors only. Generic non-document Linear project resources are out of scope.
+  - Run Linear Project Document sync only after OpenSpec archive succeeds and merges delta specs into canonical spec files.
+  - Mirror documents use deterministic titles: `OpenSpec: <capability-name>`.
+  - Available Linear tools create project-scoped documents, not folders. Use the `OpenSpec:` title namespace as the controlled replacement boundary.
+  - Because these documents are mirrors, archive-time agents may replace the full document body with canonical OpenSpec spec content.
+  - Do not transition the bound Linear story to Done before OpenSpec archive succeeds.
 ```
 
 Validate:

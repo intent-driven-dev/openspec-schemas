@@ -25,10 +25,11 @@ The `linearized` schema SHALL instruct agents to load `openspec/linear.yaml` whe
 - **GIVEN** a project activates `schema: linearized`
 - **AND** `openspec/linear.yaml` does not exist
 - **WHEN** a contributor starts a new change
-- **THEN** the schema instructions require the agent to verify Linear MCP connectivity when possible
+- **THEN** the schema instructions require the agent to stop normal proposal discovery and immediately verify Linear MCP connectivity when possible
 - **AND** ask for the Linear team and project
 - **AND** optionally ask for a Linear issue label filter
-- **AND** write the selected setup to `openspec/linear.yaml`.
+- **AND** write the selected setup to `openspec/linear.yaml`
+- **AND** make the next user-facing question which configured-project Backlog issue to pick.
 
 #### Scenario: Existing setup is loaded silently
 - **GIVEN** `openspec/linear.yaml` exists
@@ -94,14 +95,15 @@ The `linearized` task guidance SHALL require a final task group for implementati
 - **WHEN** `tasks.md` is created for implementation that changes `openspec/schemas/linearized/`
 - **THEN** it requires `openspec schema validate linearized` before the change is considered complete.
 
-### Requirement: Linearized proposal SHALL preserve archive guidance for Linear Project Document mirrors
-The `linearized` proposal template and schema documentation SHALL preserve optional archive-time guidance for mirroring canonical OpenSpec specs to Linear Project Documents.
+### Requirement: Linearized install guidance SHALL define archive policy for Linear Project Document mirrors
+The `linearized` install guidance SHALL define non-negotiable archive-time policy for mirroring canonical OpenSpec specs to Linear Project Documents in `openspec/config.yaml`.
 
-#### Scenario: Proposal contains preserved archive guidance
-- **WHEN** `proposal.md` is created for a `linearized` change
-- **THEN** it contains schema-provided Linear archive guidance that agents preserve unless the schema changes
+#### Scenario: Config contains archive guidance
+- **WHEN** the `linearized` schema is installed in a target project
+- **THEN** the install guidance tells contributors to add non-negotiable Linear archive policy to `openspec/config.yaml`
 - **AND** the guidance states OpenSpec canonical specs are the source of truth
-- **AND** the guidance states Linear Project Documents are mirrors.
+- **AND** the guidance states Linear Project Documents are mirrors
+- **AND** the guidance allows archive-time agents to replace the full mirrored document body with canonical OpenSpec spec content.
 
 #### Scenario: Archive sync mirrors canonical specs after OpenSpec archive
 - **GIVEN** OpenSpec archive has merged changed delta specs into canonical files under `openspec/specs/`
@@ -116,6 +118,13 @@ The `linearized` proposal template and schema documentation SHALL preserve optio
 - **THEN** the schema guidance requires the agent to update a stored document ID or slug from `openspec/linear.yaml` when present
 - **AND** otherwise look for an existing project document with the expected deterministic title
 - **AND** create a new project-scoped document only when no existing document is found.
+
+#### Scenario: Archive sync uses document title namespace instead of folders
+- **GIVEN** available Linear tools support project-scoped documents
+- **AND** do not expose project document folder creation
+- **WHEN** post-archive sync targets a Linear Project Document mirror
+- **THEN** the schema guidance requires deterministic titles using `OpenSpec: <capability-name>`
+- **AND** treats that title namespace as the controlled replacement boundary.
 
 #### Scenario: Archive sync skips unsupported resource types
 - **WHEN** post-archive Linear sync runs

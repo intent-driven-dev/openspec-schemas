@@ -58,7 +58,7 @@ Alternatives considered:
 
 ### Decision: Persist Linear setup in `openspec/linear.yaml`
 
-First-time setup will verify Linear MCP connectivity, ask for the Linear team and project, optionally ask for an issue label filter, and write `openspec/linear.yaml`.
+First-time setup will run immediately when `openspec/linear.yaml` is missing, verify Linear MCP connectivity, ask for the Linear team and project, optionally ask for an issue label filter, and write `openspec/linear.yaml`. After setup is written, the next user-facing question should be which configured-project Backlog issue to pick.
 
 The file should store stable identifiers and display names, for example:
 
@@ -74,6 +74,7 @@ issue_label_filter:
   name: "<optional-label-name>"
 archive_documents:
   enabled: true
+  title_prefix: "OpenSpec:"
   documents:
     "<capability-name>":
       document_id: "<linear-document-id-or-slug>"
@@ -126,10 +127,10 @@ Alternatives considered:
 
 OpenSpec specs under `openspec/specs/` remain canonical. After archive merges delta specs into canonical specs, an agent may mirror changed canonical spec files into Linear Project Documents when Linear MCP is available.
 
-OpenSpec schemas do not currently provide a first-class `archive` instruction section equivalent to `apply.instruction`. The archive sync contract will therefore be preserved in `proposal.md` and documented in the schema README, rather than emitted as implementation task checkboxes that would affect apply verification.
+OpenSpec schemas do not currently provide a first-class `archive` instruction section equivalent to `apply.instruction`. The archive sync contract will therefore be documented as non-negotiable `openspec/config.yaml` context/rules in installation guidance, rather than emitted as implementation task checkboxes that would affect apply verification or repeated in every proposal.
 
-- the `proposal.md` template, which contains preserved Linear archive guidance for agents;
-- the schema README, which documents the archive sequence for agents.
+- the target project's `openspec/config.yaml`, which carries the durable archive policy for agents;
+- the schema README, which documents the required config snippet and archive sequence for agents.
 
 The archive sequence should be:
 
@@ -146,7 +147,7 @@ Document sync should use this upsert order:
 3. If found, update it and persist its ID in `openspec/linear.yaml`.
 4. If not found, create a new project-scoped document with `save_document` and persist its ID in `openspec/linear.yaml`.
 
-The default title should be deterministic, such as `OpenSpec: <capability-name>`, so repeated archive syncs can find the same document even before the ID is persisted.
+The default title should be deterministic, such as `OpenSpec: <capability-name>`, so repeated archive syncs can find the same document even before the ID is persisted. The available Linear tools support creating project-scoped documents but do not expose project document folder creation, so the title namespace is the controlled replacement boundary.
 
 Rationale: verified Linear MCP tools support project document resources. Mirroring canonical specs gives Linear users readable project resources while preserving OpenSpec as source of truth.
 
