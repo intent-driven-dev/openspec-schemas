@@ -1,5 +1,8 @@
 # Linearized OpenSpec Schema
 
+> **Experimental:** This schema is still being validated and may change as the
+> Linear integration workflow is refined.
+
 `linearized` is the standard OpenSpec proposal-to-tasks workflow with
 best-effort Linear story mirroring. It is for teams that plan delivery in Linear
 but keep OpenSpec specs as the source of truth.
