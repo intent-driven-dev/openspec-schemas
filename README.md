@@ -113,6 +113,32 @@ Structured workflow for event-centric systems with [Event Storming](https://en.w
 
 For more details, see `openspec/schemas/event-driven/README.md`.
 
+## Intent-Driven
+
+Spec-driven workflow for changes that need proposal-led intent capture,
+Gherkin behaviour specs, technical design, durable Architecture Decision
+Records, and implementation tasks.
+
+Artifact order:
+
+```text
+proposal -> specs -> design -> adr -> tasks
+```
+
+Activation:
+
+```yaml
+schema: intent-driven
+```
+
+Validate:
+
+```bash
+openspec schema validate intent-driven
+```
+
+For more details, see `openspec/schemas/intent-driven/README.md`.
+
 ## Linearized
 
 Spec-driven workflow for teams that coordinate work in Linear while keeping
