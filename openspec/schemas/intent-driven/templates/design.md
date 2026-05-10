@@ -1,7 +1,6 @@
 ## Context
 
 <!-- Background and current state -->
-<!-- Include relevant currently-in-force ADRs from <repo>/adr/. -->
 
 ## Goals / Non-Goals
 
@@ -14,7 +13,6 @@
 ## Decisions
 
 <!-- Key design decisions and rationale -->
-<!-- Flag decisions that should become durable ADRs. -->
 
 ## Risks / Trade-offs
 
@@ -22,8 +20,8 @@
 
 ## Migration Plan
 
-<!-- Deployment and rollback steps, if applicable -->
+<!-- Deployment, migration, and rollback notes if applicable -->
 
 ## Open Questions
 
-<!-- Outstanding decisions, including any in-force ADRs that should be superseded -->
+<!-- Outstanding decisions, including any in-force ADRs that need supersession -->

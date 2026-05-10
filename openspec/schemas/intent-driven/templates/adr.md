@@ -6,7 +6,7 @@
 
 ## Context
 
-<!-- Forces at play, constraints, what's prompting this decision. If this ADR supersedes a prior one, explain here why the earlier decision is being revisited - the prior ADR's file is immutable and will not be edited. -->
+<!-- Forces at play, constraints, what's prompting this decision. If this ADR supersedes a prior one, explain here why the earlier decision is being revisited; the prior ADR's file is immutable and will not be edited. -->
 
 ## Decision
 

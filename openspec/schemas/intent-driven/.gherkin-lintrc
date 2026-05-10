@@ -1,9 +1,0 @@
-{
-  "no-empty-file": "on",
-  "no-files-without-scenarios": "on",
-  "no-unnamed-features": "on",
-  "no-unnamed-scenarios": "on",
-  "keywords-in-logical-order": "on",
-  "new-line-at-eof": ["on", "yes"],
-  "no-trailing-spaces": "on"
-}

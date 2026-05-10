@@ -113,11 +113,33 @@ Structured workflow for event-centric systems with [Event Storming](https://en.w
 
 For more details, see `openspec/schemas/event-driven/README.md`.
 
+## Behaviour-Driven
+
+Proposal-led workflow for changes where observable behaviour should drive design
+and implementation. Specs stay mergeable by OpenSpec as `spec.md` files, while
+the requirement and scenario content uses Gherkin-style `GIVEN` / `WHEN` /
+`THEN` steps.
+
+Activation:
+
+```yaml
+schema: behaviour-driven
+```
+
+Validate:
+
+```bash
+openspec schema validate behaviour-driven
+```
+
+For more details, see `openspec/schemas/behaviour-driven/README.md`.
+
 ## Intent-Driven
 
-Spec-driven workflow for changes that need proposal-led intent capture,
-Gherkin behaviour specs, technical design, durable Architecture Decision
-Records, and implementation tasks.
+Proposal-led workflow for changes that need observable behaviour, technical
+design, durable Architecture Decision Records, and implementation tasks. Specs
+stay mergeable by OpenSpec as `spec.md` files, while the requirement and
+scenario content uses Gherkin-style `GIVEN` / `WHEN` / `THEN` steps.
 
 Artifact order:
 

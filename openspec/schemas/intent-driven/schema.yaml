@@ -1,6 +1,6 @@
 name: intent-driven
 version: 1
-description: Intent-driven OpenSpec workflow - proposal -> Gherkin specs -> design -> ADR -> tasks
+description: Intent-driven OpenSpec workflow - proposal -> Gherkin-style specs -> design -> adr -> tasks
 artifacts:
   - id: proposal
     generates: proposal.md
@@ -20,123 +20,103 @@ artifacts:
       **BREAKING**.
 
       - **Capabilities**: Identify which behaviour specs will be created or modified:
-        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.feature`. Use kebab-case names (e.g., `user-auth`, `data-export`).
-        - **Modified Capabilities**: List existing capabilities whose behaviour is changing. Only include if spec-level behaviour changes (not just implementation details). Each needs a Gherkin feature file. Check `openspec/specs/` for existing spec names. Leave empty if no behaviour changes.
+        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.md`. Use kebab-case names (e.g., `user-auth`, `data-export`).
+        - **Modified Capabilities**: List existing capabilities whose behaviour is changing. Only include if spec-level behaviour changes, not just implementation details. Each needs an OpenSpec Markdown delta file at `specs/<name>/spec.md`. Check `openspec/specs/` for existing spec names. Leave empty if no behaviour changes.
       - **Impact**: Affected code, APIs, dependencies, or systems.
 
 
       IMPORTANT: The Capabilities section is critical. It creates the contract
-      between
-
-      proposal and specs phases. Research existing specs before filling this in.
-
-      Each capability listed here will need a corresponding spec file.
-
-
-      Keep it concise (1-2 pages). Focus on the "why" not the "how" -
-
-      implementation details belong in design.md.
+      between proposal and specs phases. Research existing specs before filling
+      this in. Each capability listed here will need a corresponding spec file.
 
 
       Durable architectural decisions worth carrying across changes are
-      distilled into ADR files at <repo>/adr/ by a later step (after design).
+      distilled into ADR files at <repo>/adr/ by a later step after design.
+
+
+      Keep it concise (1-2 pages). Focus on the "why" not the "how" -
+      implementation details belong in design.md.
 
 
       This is the foundation - specs, design, adr, and tasks all build on this.
     requires: []
   - id: specs
-    generates: specs/**/*.feature
-    description: Detailed Gherkin behaviour specifications for the change
-    template: spec.feature
+    generates: specs/**/*.md
+    description: OpenSpec Markdown specs with Gherkin-style behaviour scenarios
+    template: spec.md
     instruction: >
-      Create Gherkin feature files that define WHAT the system should do.
+      Create OpenSpec Markdown spec files that define WHAT the system should do.
+      The Markdown structure is the OpenSpec merge wrapper; the requirement and
+      scenario content inside that wrapper should be written in Gherkin style.
 
 
-      Create one feature file per capability listed in the proposal's Capabilities
+      Create one spec file per capability listed in the proposal's Capabilities
       section.
 
       - New capabilities: use the exact kebab-case name from the proposal
-      (specs/<capability>/spec.feature).
+      (specs/<capability>/spec.md).
 
       - Modified capabilities: use the existing spec folder name from
-      openspec/specs/<capability>/ when creating the feature file at
-      specs/<capability>/spec.feature.
+      openspec/specs/<capability>/ when creating the delta spec at
+      specs/<capability>/spec.md.
 
 
-      Linting requirement:
+      Delta operations (use ## headers exactly so OpenSpec archive can merge):
 
-      - Before editing any behaviour spec, run `npx gherkin-lint
-      -c openspec/schemas/intent-driven/.gherkin-lintrc
-      "openspec/specs/**/*.feature" "openspec/changes/<change>/specs/**/*.feature"`
-      from the target repository root when matching files exist. If this schema
-      is installed outside the project, pass the installed schema config path to
-      `-c`.
+      - **ADDED Requirements**: New behaviour capabilities.
 
-      - After every change to a behaviour spec, run the same command again and
-      fix all lint failures before continuing.
+      - **MODIFIED Requirements**: Changed behaviour - MUST include the full
+      updated requirement content, not a partial diff.
 
-      - If there are no existing feature files before authoring the first spec,
-      create the new `spec.feature` file first and then run gherkin-lint before
-      moving on to design, adr, or tasks.
+      - **REMOVED Requirements**: Deprecated behaviours - MUST include
+      **Reason** and **Migration**.
+
+      - **RENAMED Requirements**: Name changes only - use FROM:/TO: format.
 
 
-      Gherkin format requirements:
+      OpenSpec wrapper requirements:
 
-      - Each file MUST contain exactly one `Feature:` and MUST be valid Gherkin.
+      - Each requirement MUST use `### Requirement: <name>`.
 
-      - Use `Rule:` to group scenarios by business rule or requirement when a
-      capability has multiple distinct behaviours.
+      - Each scenario MUST use `#### Scenario: <name>`. This exact four-hash
+      heading is required for OpenSpec validation and archive.
 
-      - Use `Scenario:` for concrete examples. `Example:` is allowed as the
-      Gherkin synonym, but prefer `Scenario:` for consistency.
+      - Every requirement MUST have at least one scenario.
 
-      - Each scenario MUST describe behaviour with `Given`, `When`, and `Then`
-      steps. Use `And` or `But` for follow-on steps.
 
-      - Write observable outcomes in `Then` steps. Avoid implementation details
+      Gherkin-style content requirements:
+
+      - Treat each requirement as the feature or business rule being specified.
+      You may include `Feature:` or `Rule:` prose in the requirement body when
+      it clarifies the behaviour.
+
+      - Each scenario MUST describe behaviour with `GIVEN`, `WHEN`, and `THEN`
+      steps. Use `AND` or `BUT` for follow-on steps.
+
+      - Write observable outcomes in `THEN` steps. Avoid implementation details
       such as database table names, private methods, or UI selectors unless
       they are part of the domain contract.
 
-      - Use two-space indentation for nested Gherkin content.
+      - Do not create `.feature` files for this artifact. External Gherkin
+      linting is outside this schema; `spec.md` is required for OpenSpec merge.
 
 
-      Modified behaviour workflow:
+      MODIFIED requirements workflow:
 
-      1. Locate the existing capability feature file, usually
-      openspec/specs/<capability>/spec.feature.
+      1. Locate the existing requirement in openspec/specs/<capability>/spec.md.
 
-      2. Copy the relevant existing Feature, Rule, or Scenario content into the
-      change feature file.
+      2. Copy the ENTIRE requirement block (from `### Requirement:` through all
+      scenarios).
 
-      3. Edit the copied Gherkin so the feature file represents the full desired
-      behaviour after the change.
+      3. Paste under `## MODIFIED Requirements` and edit it so the copied block
+      represents the full desired behaviour after the change.
 
-      4. Run gherkin-lint after the edit and resolve every issue.
-
-
-      Do not use Markdown delta headers such as `## ADDED Requirements`,
-      `## MODIFIED Requirements`, or `### Requirement:` inside `.feature` files;
-      they are not valid Gherkin.
+      4. Ensure header text matches exactly (whitespace-insensitive).
 
 
-
-      Example:
-
-      ```
-
-      Feature: User data export
-
-        Rule: Users can export their own data
-          Scenario: Successful CSV export
-            Given a user has saved data
-            When the user exports their data as CSV
-            Then the system provides a CSV file containing the user's data
-
-      ```
-
-
-      Specs should be executable documentation - each scenario is a potential
-      acceptance test.
+      Common pitfall: Using MODIFIED with partial content loses detail at
+      archive time. If adding new concerns without changing existing behaviour,
+      use ADDED instead.
     requires:
       - proposal
   - id: design
@@ -164,12 +144,11 @@ artifacts:
       Before writing, list every file in <repo>/adr/. Build the supersession
       graph from each ADR's Supersedes field - an ADR is no longer in force if
       a later ADR's Supersedes points at it. Only the currently-in-force ADRs
-      (accepted, not superseded) constrain this design - older superseded
-      ADRs are historical context only and MUST NOT be treated as live
-      commitments. New design choices MUST be coherent with the in-force set.
-      If a current ADR needs to be revisited, do not propose modifying it;
-      flag it under Open Questions and let the adr step record a new
-      superseding ADR.
+      (accepted, not superseded) constrain this design. Older superseded ADRs
+      are historical context only and MUST NOT be treated as live commitments.
+      New design choices MUST be coherent with the in-force set. If a current
+      ADR needs to be revisited, do not propose modifying it; flag it under
+      Open Questions and let the adr step record a new superseding ADR.
 
 
       Sections:
@@ -187,8 +166,8 @@ artifacts:
       - **Migration Plan**: Steps to deploy, rollback strategy (if applicable)
 
       - **Open Questions**: Outstanding decisions or unknowns to resolve.
-      Include any in-force ADRs that this design suggests revisiting - the
-      adr step will record the supersession.
+      Include any in-force ADRs that this design suggests revisiting; the adr
+      step will record the supersession.
 
 
       Focus on architecture and approach, not line-by-line implementation.
@@ -213,21 +192,19 @@ artifacts:
 
 
       IRON RULE - ADRs are immutable once accepted. You MUST NOT edit a prior
-      ADR file under any circumstance (not its Status, not its body, not its
-      date - nothing). To change a previously accepted decision, record a NEW
-      ADR whose Status is "accepted, supersedes ADR-NNNN" and whose
-      `Supersedes:` field names the prior one. Design consumers derive what is
-      currently in force by walking Supersedes links across the folder - the
-      prior ADR's contents stay frozen as a historical record.
+      ADR file under any circumstance, not its Status, not its body, not its
+      date. To change a previously accepted decision, record a NEW ADR whose
+      Status is "accepted, supersedes ADR-NNNN" and whose `Supersedes:` field
+      names the prior one. Design consumers derive what is currently in force
+      by walking Supersedes links across the folder. The prior ADR's contents
+      stay frozen as a historical record.
 
 
       Process:
 
-
       1. Read every existing ADR in <repo>/adr/. Build the supersession graph
       from each ADR's Supersedes field. Note the highest sequence number in
       use.
-
 
       2. Re-read design.md. Identify decisions that meet ALL of these:
 
@@ -237,9 +214,8 @@ artifacts:
       - Will affect future changes beyond this one.
 
       - Either aren't already captured by a currently-in-force ADR, OR
-      intentionally diverge from one (in which case the new ADR supersedes the
-      prior).
-
+      intentionally diverge from one. If diverging, the new ADR supersedes the
+      prior.
 
       3. For each qualifying decision, create a NEW file at
       <repo>/adr/NNNN-kebab-title.md, where NNNN is a 4-digit sequence one
@@ -247,8 +223,7 @@ artifacts:
       this decision replaces a prior in-force ADR, set Status to
       "accepted, supersedes ADR-NNNN", populate the `Supersedes:` field, and
       explain in Context why the prior decision is being revisited. Do NOT
-      touch the prior ADR's file - leave it exactly as it was.
-
+      touch the prior ADR's file.
 
       4. If nothing meets the bar, do not invent ADRs. The step still completes
       as long as <repo>/adr/ already contains at least one ADR file.
@@ -268,49 +243,26 @@ artifacts:
 
 
       **IMPORTANT: Follow the template below exactly.** The apply phase parses
-
       checkbox format to track progress. Tasks not using `- [ ]` won't be
       tracked.
 
 
       Guidelines:
 
-      - Group related tasks under ## numbered headings
+      - Group related tasks under ## numbered headings.
 
-      - Each task MUST be a checkbox: `- [ ] X.Y Task description`
+      - Each task MUST be a checkbox: `- [ ] X.Y Task description`.
 
-      - Tasks should be small enough to complete in one session
+      - Tasks should be small enough to complete in one session.
 
-      - Order tasks by dependency (what must be done first?)
+      - Order tasks by dependency (what must be done first?).
 
-      - If implementation changes behaviour specs, include tasks to run
-      gherkin-lint before and after editing `specs/**/*.feature`.
-
-
-      Example:
-
-      ```
-
-      ## 1. Setup
-
-
-      - [ ] 1.1 Create new module structure
-
-      - [ ] 1.2 Add dependencies to package.json
-
-
-      ## 2. Core Implementation
-
-
-      - [ ] 2.1 Implement data export function
-
-      - [ ] 2.2 Add CSV formatting utilities
-
-      ```
+      - If implementation changes behaviour specs, include a task to run
+      `openspec validate <change> --type change --strict` before archive.
 
 
       Reference specs for what to build, design for how to build it, and
-      <repo>/adr/ for the durable architectural commitments to honor.
+      <repo>/adr/ for durable architectural commitments to honor.
 
       Each task should be verifiable - you know when it's done.
     requires:

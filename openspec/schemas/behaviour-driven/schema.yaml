@@ -1,6 +1,6 @@
 name: behaviour-driven
 version: 1
-description: Behaviour-driven OpenSpec workflow - proposal → Gherkin specs → design → tasks
+description: Behaviour-driven OpenSpec workflow - proposal -> Gherkin-style specs -> design -> tasks
 artifacts:
   - id: proposal
     generates: proposal.md
@@ -20,118 +20,128 @@ artifacts:
       **BREAKING**.
 
       - **Capabilities**: Identify which behaviour specs will be created or modified:
-        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.feature`. Use kebab-case names (e.g., `user-auth`, `data-export`).
-        - **Modified Capabilities**: List existing capabilities whose behaviour is changing. Only include if spec-level behaviour changes (not just implementation details). Each needs a Gherkin feature file. Check `openspec/specs/` for existing spec names. Leave empty if no behaviour changes.
+        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.md`. Use kebab-case names (e.g., `user-auth`, `data-export`).
+        - **Modified Capabilities**: List existing capabilities whose behaviour is changing. Only include if spec-level behaviour changes, not just implementation details. Each needs an OpenSpec Markdown delta file at `specs/<name>/spec.md`. Check `openspec/specs/` for existing spec names. Leave empty if no behaviour changes.
       - **Impact**: Affected code, APIs, dependencies, or systems.
 
 
       IMPORTANT: The Capabilities section is critical. It creates the contract
-      between
-
-      proposal and specs phases. Research existing specs before filling this in.
-
-      Each capability listed here will need a corresponding spec file.
+      between proposal and specs phases. Research existing specs before filling
+      this in. Each capability listed here will need a corresponding spec file.
 
 
       Keep it concise (1-2 pages). Focus on the "why" not the "how" -
-
       implementation details belong in design.md.
 
 
       This is the foundation - specs, design, and tasks all build on this.
     requires: []
   - id: specs
-    generates: specs/**/*.feature
-    description: Detailed Gherkin behaviour specifications for the change
-    template: spec.feature
+    generates: specs/**/*.md
+    description: OpenSpec Markdown specs with Gherkin-style behaviour scenarios
+    template: spec.md
     instruction: >
-      Create Gherkin feature files that define WHAT the system should do.
+      Create OpenSpec Markdown spec files that define WHAT the system should do.
+      The Markdown structure is the OpenSpec merge wrapper; the requirement and
+      scenario content inside that wrapper should be written in Gherkin style.
 
 
-      Create one feature file per capability listed in the proposal's Capabilities
+      Create one spec file per capability listed in the proposal's Capabilities
       section.
 
       - New capabilities: use the exact kebab-case name from the proposal
-      (specs/<capability>/spec.feature).
+      (specs/<capability>/spec.md).
 
       - Modified capabilities: use the existing spec folder name from
-      openspec/specs/<capability>/ when creating the feature file at
-      specs/<capability>/spec.feature.
+      openspec/specs/<capability>/ when creating the delta spec at
+      specs/<capability>/spec.md.
 
 
-      Linting requirement:
+      Delta operations (use ## headers exactly so OpenSpec archive can merge):
 
-      - Before editing any behaviour spec, run `npx gherkin-lint
-      -c openspec/schemas/behaviour-driven/.gherkin-lintrc
-      "openspec/specs/**/*.feature" "openspec/changes/<change>/specs/**/*.feature"`
-      from the target repository root when matching files exist. If this schema
-      is installed outside the project, pass the installed schema config path to
-      `-c`.
+      - **ADDED Requirements**: New behaviour capabilities.
 
-      - After every change to a behaviour spec, run the same command again and
-      fix all lint failures before continuing.
+      - **MODIFIED Requirements**: Changed behaviour - MUST include the full
+      updated requirement content, not a partial diff.
 
-      - If there are no existing feature files before authoring the first spec,
-      create the new `spec.feature` file first and then run gherkin-lint before
-      moving on to design or tasks.
+      - **REMOVED Requirements**: Deprecated behaviours - MUST include
+      **Reason** and **Migration**.
+
+      - **RENAMED Requirements**: Name changes only - use FROM:/TO: format.
 
 
-      Gherkin format requirements:
+      OpenSpec wrapper requirements:
 
-      - Each file MUST contain exactly one `Feature:` and MUST be valid Gherkin.
+      - Each requirement MUST use `### Requirement: <name>`.
 
-      - Use `Rule:` to group scenarios by business rule or requirement when a
-      capability has multiple distinct behaviours.
+      - Each scenario MUST use `#### Scenario: <name>`. This exact four-hash
+      heading is required for OpenSpec validation and archive.
 
-      - Use `Scenario:` for concrete examples. `Example:` is allowed as the
-      Gherkin synonym, but prefer `Scenario:` for consistency.
+      - Every requirement MUST have at least one scenario.
 
-      - Each scenario MUST describe behaviour with `Given`, `When`, and `Then`
-      steps. Use `And` or `But` for follow-on steps.
 
-      - Write observable outcomes in `Then` steps. Avoid implementation details
+      Gherkin-style content requirements:
+
+      - Treat each requirement as the feature or business rule being specified.
+      You may include `Feature:` or `Rule:` prose in the requirement body when
+      it clarifies the behaviour.
+
+      - Each scenario MUST describe behaviour with `GIVEN`, `WHEN`, and `THEN`
+      steps. Use `AND` or `BUT` for follow-on steps.
+
+      - Write observable outcomes in `THEN` steps. Avoid implementation details
       such as database table names, private methods, or UI selectors unless
       they are part of the domain contract.
 
-      - Use two-space indentation for nested Gherkin content.
+      - Do not create `.feature` files for this artifact. External Gherkin
+      linting is outside this schema; `spec.md` is required for OpenSpec merge.
 
 
-      Modified behaviour workflow:
+      MODIFIED requirements workflow:
 
-      1. Locate the existing capability feature file, usually
-      openspec/specs/<capability>/spec.feature.
+      1. Locate the existing requirement in openspec/specs/<capability>/spec.md.
 
-      2. Copy the relevant existing Feature, Rule, or Scenario content into the
-      change feature file.
+      2. Copy the ENTIRE requirement block (from `### Requirement:` through all
+      scenarios).
 
-      3. Edit the copied Gherkin so the feature file represents the full desired
-      behaviour after the change.
+      3. Paste under `## MODIFIED Requirements` and edit it so the copied block
+      represents the full desired behaviour after the change.
 
-      4. Run gherkin-lint after the edit and resolve every issue.
+      4. Ensure header text matches exactly (whitespace-insensitive).
 
 
-      Do not use Markdown delta headers such as `## ADDED Requirements`,
-      `## MODIFIED Requirements`, or `### Requirement:` inside `.feature` files;
-      they are not valid Gherkin.
+      Common pitfall: Using MODIFIED with partial content loses detail at
+      archive time. If adding new concerns without changing existing behaviour,
+      use ADDED instead.
 
 
       Example:
 
       ```
 
+      ## ADDED Requirements
+
+
+      ### Requirement: User data export
+
       Feature: User data export
 
-        Rule: Users can export their own data
-          Scenario: Successful CSV export
-            Given a user has saved data
-            When the user exports their data as CSV
-            Then the system provides a CSV file containing the user's data
+      Rule: Users can export their own data
+
+
+      #### Scenario: Successful CSV export
+
+      - **GIVEN** a user has saved data
+
+      - **WHEN** the user exports their data as CSV
+
+      - **THEN** the system provides a CSV file containing the user's data
 
       ```
 
 
       Specs should be executable documentation - each scenario is a potential
-      acceptance test.
+      acceptance test while remaining mergeable by OpenSpec archive.
     requires:
       - proposal
   - id: design
@@ -164,7 +174,7 @@ artifacts:
       Include alternatives considered for each decision.
 
       - **Risks / Trade-offs**: Known limitations, things that could go wrong.
-      Format: [Risk] → Mitigation
+      Format: [Risk] -> Mitigation
 
       - **Migration Plan**: Steps to deploy, rollback strategy (if applicable)
 
@@ -188,23 +198,22 @@ artifacts:
 
 
       **IMPORTANT: Follow the template below exactly.** The apply phase parses
-
       checkbox format to track progress. Tasks not using `- [ ]` won't be
       tracked.
 
 
       Guidelines:
 
-      - Group related tasks under ## numbered headings
+      - Group related tasks under ## numbered headings.
 
-      - Each task MUST be a checkbox: `- [ ] X.Y Task description`
+      - Each task MUST be a checkbox: `- [ ] X.Y Task description`.
 
-      - Tasks should be small enough to complete in one session
+      - Tasks should be small enough to complete in one session.
 
-      - Order tasks by dependency (what must be done first?)
+      - Order tasks by dependency (what must be done first?).
 
-      - If implementation changes behaviour specs, include tasks to run
-      gherkin-lint before and after editing `specs/**/*.feature`.
+      - If implementation changes behaviour specs, include a task to run
+      `openspec validate <change> --type change --strict` before archive.
 
 
       Example:
