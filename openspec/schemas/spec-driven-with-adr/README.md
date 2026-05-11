@@ -46,10 +46,13 @@ not only inside the OpenSpec change folder. Accepted ADRs are immutable. If a
 future decision changes a prior ADR, create a new ADR that supersedes the old
 one and leave the original file unchanged.
 
-## Pending Work
+## Note
 
-- Add an ADR-focused Codex/OpenSpec skill for working with ADR artifacts.
-- Add install-time support for choosing the ADR style/template used by this
-  schema.
+- For ADR skills please refer to: [Intent-Driven-Template Skills](https://github.com/intent-driven-dev/intent-driven-template/tree/main/.agents/skills/architectural-decision-records).
+- This skill takes care of choosing the ADR style/template used by this schema.
+
+## Pending
+
+- Package schema and associated skills together.
 
 For more schemas, refer to https://github.com/intent-driven-dev/openspec-schemas.
