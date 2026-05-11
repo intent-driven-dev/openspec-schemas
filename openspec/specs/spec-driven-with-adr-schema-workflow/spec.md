@@ -40,6 +40,18 @@ The `spec-driven-with-adr` schema SHALL expose the artifacts `proposal`, `specs`
 - **AND** the artifact instruction MUST strongly direct agents to create ADR files under the target repository's top-level `adr/` folder outside `openspec/`
 - **AND** the artifact instruction MUST state that ADR files are not written under `openspec/changes/<change>/`.
 
+#### Scenario: ADR artifact completion checks repository-level output
+- **GIVEN** the affected schema is `spec-driven-with-adr`
+- **WHEN** `openspec/schemas/spec-driven-with-adr/schema.yaml` defines the `adr` artifact
+- **THEN** the artifact `generates` value MUST resolve to `<repo>/adr/*.md` from the change directory
+- **AND** the value MUST match the known-good relative path pattern `../../../adr/*.md`.
+
+#### Scenario: Change-local proposal does not complete ADR artifact
+- **GIVEN** a project uses the `spec-driven-with-adr` schema
+- **WHEN** a change contains `proposal.md` but no generated ADR file under the repository-level `adr/` folder
+- **THEN** the `adr` artifact MUST NOT be considered complete
+- **AND** downstream task readiness MUST remain blocked until the ADR artifact completion check observes the intended ADR output location.
+
 #### Scenario: ADR artifact preserves repository-level decision history
 - **GIVEN** a project activates `schema: spec-driven-with-adr`
 - **WHEN** the `adr` artifact is created
@@ -90,4 +102,3 @@ Changes adding or modifying `openspec/schemas/spec-driven-with-adr/` SHALL pass 
 #### Scenario: ADR folder parameter removal is validated
 - **WHEN** implementation removes artifact folder routing metadata from the `adr` artifact
 - **THEN** `openspec schema validate spec-driven-with-adr` passes before the change is considered complete.
-
