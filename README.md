@@ -4,6 +4,12 @@ Custom [OpenSpec](https://github.com/Fission-AI/OpenSpec) schemas packaged as co
 
 Default OpenSpec includes the `spec-driven` schema, which is a strong general-purpose workflow. This repo adds more focused workflows for specific delivery contexts, and also demonstrates how to customise OpenSpec for different styles of work.
 
+Detailed write-up: [https://intent-driven.dev/blog/2026/02/12/openspec-custom-schemas/](https://intent-driven.dev/blog/2026/02/12/openspec-custom-schemas/)
+
+## Video
+
+[![Watch on YouTube](https://img.youtube.com/vi/k01nbZfwB34/0.jpg)](https://www.youtube.com/watch?v=k01nbZfwB34)
+
 ## Install a Schema
 
 Ask your coding agent to read this file and install the schema you want:
@@ -93,27 +99,21 @@ Validation Results:
 ✓ event-driven
 ```
 
-## Contributing
+## Custom Schemas
 
-See `CONTRIBUTING.md` for how to create/customize schemas using `openspec schema init` / `openspec schema fork`, and how to validate before opening a PR.
-
-## Video
-
-[![Watch on YouTube](https://img.youtube.com/vi/k01nbZfwB34/0.jpg)](https://www.youtube.com/watch?v=k01nbZfwB34)
-
-## Minimalist
+### Minimalist
 
 Fast path from spec to execution using user-story requirements and Gherkin acceptance-criteria style.
 
 For more details, see `openspec/schemas/minimalist/README.md`.
 
-## Event-Driven
+### Event-Driven
 
 Structured workflow for event-centric systems with [Event Storming](https://en.wikipedia.org/wiki/Event_storming) discovery followed by [AsyncAPI](https://www.asyncapi.com/) specification.
 
 For more details, see `openspec/schemas/event-driven/README.md`.
 
-## Behaviour-Driven
+### Behaviour-Driven
 
 Proposal-led workflow for changes where observable behaviour should drive design
 and implementation. Specs stay mergeable by OpenSpec as `spec.md` files, while
@@ -134,7 +134,7 @@ openspec schema validate behaviour-driven
 
 For more details, see `openspec/schemas/behaviour-driven/README.md`.
 
-## Intent-Driven
+### Intent-Driven
 
 Proposal-led workflow for changes that need observable behaviour, technical
 design, durable Architecture Decision Records, and implementation tasks. Specs
@@ -161,7 +161,7 @@ openspec schema validate intent-driven
 
 For more details, see `openspec/schemas/intent-driven/README.md`.
 
-## Linearized
+### Linearized
 
 Spec-driven workflow for teams that coordinate work in Linear while keeping
 OpenSpec specs as the source of truth. It starts changes from Linear stories,
@@ -199,6 +199,8 @@ Experimental proposal-to-tasks workflow for changes that also need durable
 Architecture Decision Records persisted under the target repository's top-level
 `adr/` folder.
 
-Based on OpenSpec PR: https://github.com/Fission-AI/OpenSpec/pull/1020
-
 For more details, see `openspec/schemas/spec-driven-with-adr/README.md`.
+
+## Contributing
+
+See `CONTRIBUTING.md` for how to create/customize schemas using `openspec schema init` / `openspec schema fork`, and how to validate before opening a PR.
