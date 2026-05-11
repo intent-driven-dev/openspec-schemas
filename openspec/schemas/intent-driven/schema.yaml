@@ -179,7 +179,7 @@ artifacts:
     requires:
       - proposal
   - id: adr
-    generates: "*.md"
+    generates: "../../../adr/*.md"
     description: Architecture Decision Records distilled from design for future reference
     template: adr.md
     instruction: >
