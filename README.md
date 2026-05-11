@@ -1,4 +1,4 @@
-# OpenSpec Schemas
+# OpenSpec Custom Schemas
 
 Custom [OpenSpec](https://github.com/Fission-AI/OpenSpec) schemas packaged as copyable folders under `openspec/schemas/`.
 
