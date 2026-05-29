@@ -161,38 +161,6 @@ openspec schema validate intent-driven
 
 For more details, see `openspec/schemas/intent-driven/README.md`.
 
-### Linearized
-
-Spec-driven workflow for teams that coordinate work in Linear while keeping
-OpenSpec specs as the source of truth. It starts changes from Linear stories,
-stores project setup in `openspec/linear.yaml`, records `linear_story_id` in
-proposal frontmatter, and mirrors canonical specs to Linear Project Documents
-after archive when Linear MCP is available.
-
-Activation:
-
-```yaml
-schema: linearized
-
-context: |
-  Linearized archive policy:
-  - NON-NEGOTIABLE: OpenSpec canonical specs under `openspec/specs/` are the only source of truth.
-  - Linear Project Documents are disposable mirrors only. Generic non-document Linear project resources are out of scope.
-  - Run Linear Project Document sync only after OpenSpec archive succeeds and merges delta specs into canonical spec files.
-  - Mirror documents use deterministic titles: `OpenSpec: <capability-name>`.
-  - Available Linear tools create project-scoped documents, not folders. Use the `OpenSpec:` title namespace as the controlled replacement boundary.
-  - Because these documents are mirrors, archive-time agents may replace the full document body with canonical OpenSpec spec content.
-  - Do not transition the bound Linear story to Done before OpenSpec archive succeeds.
-```
-
-Validate:
-
-```bash
-openspec schema validate linearized
-```
-
-For more details, see `openspec/schemas/linearized/README.md`.
-
 ## Spec-Driven With ADR
 
 Experimental proposal-to-tasks workflow for changes that also need durable

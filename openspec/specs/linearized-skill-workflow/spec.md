@@ -1,10 +1,16 @@
-## ADDED Requirements
+# linearized-skill-workflow Specification
+
+## Purpose
+
+Define how this repository vendors the Linearized OpenSpec lifecycle overlay as a Codex skill after retiring the `linearized` OpenSpec schema package.
+
+## Requirements
 
 ### Requirement: Repository SHALL vendor the Linearized skill unchanged
 The repository SHALL provide the Linearized lifecycle overlay as a local Codex skill copied unchanged from `/Users/harikrishnan/polarizer/projects/sdd/openspec/Linear/linear-integration/.codex/skills/openspec-linearized`.
 
 #### Scenario: Skill directory is copied
-- **WHEN** the change is implemented
+- **WHEN** the Linearized skill is vendored
 - **THEN** the full source skill directory is copied to `.codex/skills/openspec-linearized/`
 - **AND** the copied skill contains `SKILL.md`, `agents/openai.yaml`, and `references/lifecycle.md`
 - **AND** the copied files are byte-for-byte identical to the source skill files

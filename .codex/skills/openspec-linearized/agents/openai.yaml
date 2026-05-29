@@ -1,0 +1,10 @@
+interface:
+  display_name: "OpenSpec Linearized"
+  short_description: "Overlay Linear sync on OpenSpec change work"
+  default_prompt: "Use $openspec-linearized whenever operating on an OpenSpec change so Linear stays current while the repo remains the technical source of truth."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "linear"
+      description: "Linear MCP tools for issues, comments, projects, and project documents"
