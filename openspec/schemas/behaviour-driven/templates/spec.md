@@ -4,6 +4,9 @@
 <!-- Optional Gherkin-style context, for example:
 Feature: <capability>
 Rule: <business rule>
+
+Keep this markdown tight enough that downstream task generation can derive a
+root-level `features/*.feature` file from it.
 -->
 
 #### Scenario: <!-- scenario name -->
@@ -13,7 +16,7 @@ Rule: <business rule>
 
 ## MODIFIED Requirements
 
-<!-- Copy the full existing requirement block from openspec/specs/<capability>/spec.md, then edit it so it represents the full desired behaviour after the change. -->
+<!-- Copy the full existing requirement block from openspec/specs/<capability>/spec.md, then edit it so it represents the full desired behaviour after the change. The resulting markdown should remain suitable for translating into a root-level `features/*.feature` file. If a corresponding feature file already exists, update that file in place when the feature is extracted. -->
 
 ## REMOVED Requirements
 

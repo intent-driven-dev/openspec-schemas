@@ -1,6 +1,6 @@
 name: behaviour-driven
 version: 1
-description: Behaviour-driven OpenSpec workflow - proposal -> Gherkin-style specs -> design -> tasks
+description: Behaviour-driven OpenSpec workflow - proposal -> Gherkin-style specs -> feature files -> acceptance tests -> tasks
 artifacts:
   - id: proposal
     generates: proposal.md
@@ -25,7 +25,7 @@ artifacts:
       - **Impact**: Affected code, APIs, dependencies, or systems.
 
 
-      IMPORTANT: The Capabilities section is critical. It creates the contract
+      IMPORTANT: The Capabilities section is critical. It creates the link
       between proposal and specs phases. Research existing specs before filling
       this in. Each capability listed here will need a corresponding spec file.
 
@@ -38,12 +38,14 @@ artifacts:
     requires: []
   - id: specs
     generates: specs/**/*.md
-    description: OpenSpec Markdown specs with Gherkin-style behaviour scenarios
+    description: OpenSpec Markdown specs that can be distilled into feature files and acceptance tests
     template: spec.md
     instruction: >
       Create OpenSpec Markdown spec files that define WHAT the system should do.
       The Markdown structure is the OpenSpec merge wrapper; the requirement and
-      scenario content inside that wrapper should be written in Gherkin style.
+      scenario content inside that wrapper should be written in Gherkin style
+      so it can be translated into downstream `features/*.feature` files and
+      `acceptance-tests/` step definitions.
 
 
       Create one spec file per capability listed in the proposal's Capabilities
@@ -90,11 +92,12 @@ artifacts:
       steps. Use `AND` or `BUT` for follow-on steps.
 
       - Write observable outcomes in `THEN` steps. Avoid implementation details
-      such as database table names, private methods, or UI selectors unless
-      they are part of the domain contract.
+        such as database table names, private methods, or UI selectors unless
+        they are part of the domain specification.
 
-      - Do not create `.feature` files for this artifact. External Gherkin
-      linting is outside this schema; `spec.md` is required for OpenSpec merge.
+      - Keep the behaviour description precise enough that downstream task
+        generation can derive or update a root-level `features/*.feature` file
+        and a root-level `acceptance-tests/` Node project.
 
 
       MODIFIED requirements workflow:
@@ -115,33 +118,9 @@ artifacts:
       use ADDED instead.
 
 
-      Example:
-
-      ```
-
-      ## ADDED Requirements
-
-
-      ### Requirement: User data export
-
-      Feature: User data export
-
-      Rule: Users can export their own data
-
-
-      #### Scenario: Successful CSV export
-
-      - **GIVEN** a user has saved data
-
-      - **WHEN** the user exports their data as CSV
-
-      - **THEN** the system provides a CSV file containing the user's data
-
-      ```
-
-
-      Specs should be executable documentation - each scenario is a potential
-      acceptance test while remaining mergeable by OpenSpec archive.
+      Use the spec template shape exactly. Each scenario must remain mergeable
+      by OpenSpec archive and precise enough to extract into feature files and
+      acceptance tests.
     requires:
       - proposal
   - id: design
@@ -191,18 +170,20 @@ artifacts:
       - proposal
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist with trackable tasks
+    description: Implementation checklist that starts from feature extraction and ends with passing acceptance tests
     template: tasks.md
     instruction: >
       Create the task list that breaks down the implementation work.
 
 
-      **IMPORTANT: Follow the template below exactly.** The apply phase parses
-      checkbox format to track progress. Tasks not using `- [ ]` won't be
-      tracked.
+      Treat the template as a required gate contract. Preserve the section
+      order, commit checkpoints, and `- [ ]` checkbox format, then replace
+      placeholders with change-specific feature files, acceptance-test files,
+      Cucumber.js configuration, reports, attempt limits, and implementation
+      subsystems. The apply phase parses checkbox format to track progress.
 
 
-      Guidelines:
+      Checklist requirements:
 
       - Group related tasks under ## numbered headings.
 
@@ -212,35 +193,57 @@ artifacts:
 
       - Order tasks by dependency (what must be done first?).
 
-      - If implementation changes behaviour specs, include a task to run
-      `openspec validate <change> --type change --strict` before archive.
+      Required BDD gates:
 
+      - Extract or update root-level `features/*.feature` files from the
+        OpenSpec Markdown specs before writing acceptance-test code. For
+        modified behaviour, identify and update the existing feature file
+        instead of creating a duplicate.
 
-      Example:
+      - Configure a root-level `acceptance-tests/` Node project that uses
+        Cucumber.js, ignores `acceptance-tests/node_modules/` in git, defines
+        scripts for `gherkin-lint`, JavaScript linting, and acceptance runs,
+        and writes an HTML report for every acceptance run.
 
-      ```
+      - Run `gherkin-lint` once from `acceptance-tests/` against the extracted
+        root feature files. Require zero lint errors before committing the
+        feature extraction gate.
 
-      ## 1. Setup
+      - Add step definitions, fixtures, helpers, and environment setup after
+        the feature gate commit. Run Cucumber.js with HTML report output and
+        confirm the suite fails for the intended unimplemented application
+        behaviour, not missing steps, bad configuration, feature syntax, or
+        test plumbing. Commit this failing acceptance gate before implementing
+        application code.
 
+      - Start implementation only after the failing acceptance-test setup has
+        been committed. Implementation tasks MUST be granular and name each
+        affected subsystem, such as API handlers, domain services, persistence,
+        CLI/UI surfaces, adapters, configuration, docs, fixtures, and test
+        helpers when those subsystems are in scope.
 
-      - [ ] 1.1 Create new module structure
+      - Before the acceptance-fix loop, ask how many attempts to allow; default
+        to 3 when no limit is provided. Expand the recorded limit into one
+        checkbox per attempt, labeled `Acceptance attempt X/<limit>`, with the
+        HTML report path. Run Cucumber.js until it passes or the recorded limit
+        is exhausted. After failed attempts, fix implementation code without
+        weakening committed feature files or acceptance tests. If an early
+        attempt passes, replace remaining unrun attempts with a completed "not
+        needed" checkpoint that records the passing attempt. If the last
+        allowed attempt fails, stop with an error saying there are still errors
+        and include the HTML report path.
 
-      - [ ] 1.2 Add dependencies to package.json
+      - Commit checkpoints are mandatory after feature extraction, after
+        failing acceptance-test setup, and after passing implementation. If a
+        required commit cannot be made, the task list MUST direct the
+        contributor to pause before crossing the gate.
 
+      - If accepted behaviour is wrong, update the OpenSpec artifacts
+        deliberately and review the test change; never weaken committed
+        feature files or acceptance tests just to make implementation pass.
 
-      ## 2. Core Implementation
-
-
-      - [ ] 2.1 Implement data export function
-
-      - [ ] 2.2 Add CSV formatting utilities
-
-      ```
-
-
-      Reference specs for what needs to be built, design for how to build it.
-
-      Each task should be verifiable - you know when it's done.
+      - If implementation changes behaviour specs, include
+        `openspec validate <change> --type change --strict` before archive.
     requires:
       - specs
       - design
@@ -249,5 +252,21 @@ apply:
     - tasks
   tracks: tasks.md
   instruction: |
-    Read context files, work through pending tasks, mark complete as you go.
-    Pause if you hit blockers or need clarification.
+    Follow tasks.md in gate order and mark checkboxes complete as work finishes.
+    Enforce the feature-extraction, failing-acceptance, implementation, and
+    verification gates exactly as written. Stop before crossing any gate if its
+    lint, test, validation, or commit checkpoint fails.
+
+    Do not start acceptance-test code before the committed feature extraction
+    gate. Do not start application implementation before the committed failing
+    Cucumber.js acceptance gate. During implementation, use the attempt limit
+    recorded in tasks.md; if none is recorded, default to 3 and state that
+    default before running the loop. Each attempt must run Cucumber.js with HTML
+    report output. After a failed attempt, fix implementation code and retry
+    until the suite passes or the limit is exhausted. If the final allowed
+    attempt fails, stop with an error saying there are still errors and include
+    the HTML report path.
+
+    Never weaken committed feature files or acceptance tests to make
+    implementation pass. If accepted behaviour is wrong, pause and update the
+    OpenSpec artifacts before changing committed acceptance coverage.
