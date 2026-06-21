@@ -1,5 +1,5 @@
 name: spec-driven-with-beads
-version: 2
+version: 3
 description: >
   OpenSpec workflow powered by Beads issue tracking.
   proposal -> specs -> design -> tasks+beads -> apply (via Beads) -> consolidate.
@@ -128,6 +128,14 @@ artifacts:
       create it from the template at
       `openspec/schemas/spec-driven-with-beads/templates/spec-driven-change.formula.toml`.
 
+      Also copy the spec-compliance aspect:
+      ```
+      cp openspec/schemas/spec-driven-with-beads/templates/spec-compliance.aspect.toml .beads/formulas/spec-compliance.aspect.toml
+      ```
+
+      The aspect auto-injects a "Verify spec scenarios pass" step before
+      consolidate — no further action needed.
+
 
       **2. Pour the molecule**
 
@@ -142,28 +150,53 @@ artifacts:
 
       ```
       bd-xyz (epic: Spec-driven Change: <change-name>)
-      ├── bd-xyz.1  proposal          (human, needs: —)
-      ├── bd-xyz.2  specs             (needs: proposal)
-      ├── bd-xyz.3  design            (needs: specs)
-      ├── bd-xyz.4  implement         (needs: design)
-      └── bd-xyz.5  consolidate       (human, needs: implement)
+      ├── bd-xyz.1  proposal                (human, needs: —)
+      ├── bd-xyz.2  specs                   (needs: proposal)
+      ├── bd-xyz.3  design                  (needs: specs)
+      ├── bd-xyz.4  implement               (needs: design)
+      │   └── [on_complete → bd ready]
+      ├── bd-xyz.5  verify-specs-consolidate (auto-injected by aspect)
+      └── bd-xyz.6  consolidate             (human, needs: implement, verify-specs)
       ```
 
       The dependency chain is built into the formula — no manual `bd dep add` needed.
+
+      **Optional — parallel capability implementation (multi-agent):**
+      If the change has multiple capabilities and you have multiple agents,
+      bond a multi-agent formula at the `parallel-execution` bond point:
+      ```
+      bd mol bond mol-parallel-execution <mol-id> --ref parallel-execution
+      ```
+      This splits the implement step into N sub-steps (one per capability),
+      each pinned to a different agent with `bd pin`. All sub-steps use
+      `waits_for` (fan-in) to rejoin before consolidate.
+
+      **Optional — async gates (human approval, CI checks):**
+      Bond a gated formula at the `async-gates` bond point:
+      ```
+      bd mol bond mol-gated-approval <mol-id> --ref async-gates
+      ```
+      This adds human approval gates before implementation, timer delays,
+      or GitHub CI checks.
+
+      If you don't bond anything, the molecule runs sequential —
+      no extra configuration needed.
 
 
       **3. Label the molecule**
 
       ```
-      bd label add bd-xyz change:<change-name>
-      bd label add bd-xyz schema:spec-driven-with-beads
+      bd label add <mol-id> change:<change-name>
+      bd label add <mol-id> schema:spec-driven-with-beads
+      bd label add <mol-id> mode:sequential
       ```
+      Use `mode:parallel` if you bonded a multi-agent formula.
 
 
       **4. Set acceptance criteria for the implement step**
 
       ```
-      bd update bd-xyz.4 --acceptance "All spec scenarios pass. Tests added."
+      bd update <mol-id>.4 --acceptance "All spec scenarios pass. Tests added."
       ```
 
 
@@ -183,7 +216,7 @@ apply:
     Drive implementation through the molecule. The dependency graph
     enforces order automatically.
 
-    Workflow:
+    Sequential (default — no bonding needed):
     1. Run `bd mol list --json` to find the molecule for this change.
     2. Run `bd dep tree <mol-id>` to see the step hierarchy.
     3. Run `bd ready` — only shows steps whose needs are met.
@@ -201,11 +234,27 @@ apply:
        bd close <mol-id>.N --reason "Implemented"
        ```
     8. Run `bd ready` again — next step in the chain becomes available.
+       The `on_complete` hook on the implement step runs `bd ready` automatically.
     9. Repeat until all steps are closed.
+
+    Parallel (if bonded at parallel-execution bond point):
+    1. Run `bd dep tree <mol-id>` to see the sub-step hierarchy.
+    2. Each sub-step is pinned to an agent via `bd pin`.
+    3. Each agent claims, implements, and closes their sub-step independently.
+    4. The consolidate step waits for ALL sub-steps via `waits_for` (fan-in).
+    5. Use `bd blocked` to check if any sub-step is blocking the fan-in.
+
+    Async (if bonded at async-gates bond point):
+    1. Run `bd show <mol-id>.N` to check gate state.
+    2. For human gates: wait for approval via `bd gate approve`.
+    3. For timer gates: `bd show` shows remaining duration.
+    4. For GitHub gates: `bd show` shows CI/PR status.
+    5. Emergency override: `bd gate skip <mol-id>.N --reason "..."`.
 
     Tips:
     - `bd blocked` shows steps waiting on dependencies.
     - `bd stats` shows molecule progress.
+    - `bd show <mol-id>.N --json | jq '.gate'` shows gate details.
     - Mark tasks.md checkboxes for human readability, but the molecule
       is the source of truth.
 
@@ -221,11 +270,19 @@ consolidate:
        ```
        bd mol show <mol-id>
        ```
-    2. Run molecule compaction:
+
+    2. Run structural validation:
+       ```
+       bd lint
+       ```
+       All issues MUST pass lint. If any fail, fix them before proceeding.
+
+    3. Run molecule compaction:
        ```
        bd compact
        ```
-    3. Distill learnings from this change:
+
+    4. Distill learnings from this change:
        ```
        bd remember --key spec-driven-beads-<change-name> "Lessons from this change:
        - What unexpected problems did you encounter?
@@ -233,14 +290,27 @@ consolidate:
        - Any surprising edge cases or constraints?
        - What should the next similar change do differently?"
        ```
-    4. Label the molecule as consolidated:
+
+    5. Squash the molecule into a digest issue:
+       ```
+       bd mol squash <mol-id> --summary "Spec-driven change: <change-name>"
+       ```
+       This compresses the 5 child steps into a single lightweight record.
+       The molecule remains searchable but no longer clutters the issue graph.
+
+    6. Optionally extract a reusable formula (if this change
+       represents a repeatable pattern):
+       ```
+       bd mol distill <mol-id> my-pattern
+       ```
+       This creates `.beads/formulas/my-pattern.formula.toml` from the
+       completed change. Future projects can `bd pour my-pattern`.
+
+    7. Label and archive:
        ```
        bd label add <mol-id> status:consolidated
-       ```
-    5. Run the OpenSpec archive command:
-       ```
        openspec archive
        ```
 
     Future `bd prime` calls will inject the learnings into every session.
-    The labeled molecule remains searchable: `bd list --label status:consolidated`.
+    The squashed digest and distilled formulas persist beyond the change.

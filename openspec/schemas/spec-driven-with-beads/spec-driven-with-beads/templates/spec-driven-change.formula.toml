@@ -1,6 +1,6 @@
 formula = "spec-driven-change"
 description = "OpenSpec spec-driven change with Beads"
-version = 1
+version = 2
 type = "workflow"
 
 [vars.name]
@@ -11,11 +11,35 @@ required = true
 description = "Comma-separated list of capability names"
 required = false
 
-# Phases mirror the OpenSpec schema:
-# proposal -> specs -> design -> apply -> consolidate
+# Base dependency chain: proposal -> specs -> design -> implement -> consolidate
 #
-# Human steps for proposal/specs/design require agent review.
-# Gate steps for consolidate ensure learnings are captured.
+# Bond points for optional composition:
+#   parallel-execution (after implement) — split implement into parallel sub-steps
+#     Bond a multi-agent formula here for parallel capability implementation.
+#     Each sub-step gets its own bd pin for agent assignment.
+#     Uses waits_for (fan-in) to rejoin before consolidate.
+#
+#   async-gates (before implement) — add gates for async coordination
+#     Bond a gated formula here for human approval gates, CI checks, or timers.
+#     Gates block step progression until conditions are met.
+#
+#   spec-compliance (before consolidate) — auto-injected by aspect
+#     The spec-compliance.aspect.toml injects "Verify specs pass" here.
+#     Applied automatically when the aspect is installed in .beads/formulas/.
+
+[[compose.bond_points]]
+id = "parallel-execution"
+step = "implement"
+position = "after"
+description = "Bond a multi-agent formula here to split implement into parallel sub-steps per capability"
+
+[[compose.bond_points]]
+id = "async-gates"
+step = "implement"
+position = "before"
+description = "Bond a gated formula here for human approval, CI checks, or timer gates"
+
+# Base steps
 
 [[steps]]
 id = "proposal"
@@ -40,10 +64,12 @@ id = "implement"
 title = "Implement {{name}}"
 needs = ["design"]
 description = "Implement the change per specs and design"
+[steps.on_complete]
+run = "bd ready"
 
 [[steps]]
 id = "consolidate"
 title = "Consolidate {{name}}"
 needs = ["implement"]
 type = "human"
-description = "Close issues, compact, remember learnings, archive"
+description = "Lint, squash, remember learnings, archive"
