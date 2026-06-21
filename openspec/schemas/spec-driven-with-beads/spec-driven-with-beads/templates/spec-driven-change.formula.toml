@@ -1,0 +1,49 @@
+formula = "spec-driven-change"
+description = "OpenSpec spec-driven change with Beads"
+version = 1
+type = "workflow"
+
+[vars.name]
+description = "Change name (kebab-case)"
+required = true
+
+[vars.capabilities]
+description = "Comma-separated list of capability names"
+required = false
+
+# Phases mirror the OpenSpec schema:
+# proposal -> specs -> design -> apply -> consolidate
+#
+# Human steps for proposal/specs/design require agent review.
+# Gate steps for consolidate ensure learnings are captured.
+
+[[steps]]
+id = "proposal"
+title = "Review proposal for {{name}}"
+type = "human"
+description = "Review the proposal document at openspec/changes/{{name}}/proposal.md"
+
+[[steps]]
+id = "specs"
+title = "Write specs for {{name}}"
+needs = ["proposal"]
+description = "Create spec files under openspec/changes/{{name}}/specs/"
+
+[[steps]]
+id = "design"
+title = "Design {{name}}"
+needs = ["specs"]
+description = "Write design document at openspec/changes/{{name}}/design.md"
+
+[[steps]]
+id = "implement"
+title = "Implement {{name}}"
+needs = ["design"]
+description = "Implement the change per specs and design"
+
+[[steps]]
+id = "consolidate"
+title = "Consolidate {{name}}"
+needs = ["implement"]
+type = "human"
+description = "Close issues, compact, remember learnings, archive"

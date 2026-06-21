@@ -1,5 +1,5 @@
 name: spec-driven-with-beads
-version: 1
+version: 2
 description: >
   OpenSpec workflow powered by Beads issue tracking.
   proposal -> specs -> design -> tasks+beads -> apply (via Beads) -> consolidate.
@@ -79,27 +79,6 @@ artifacts:
       Common pitfall: Using MODIFIED with partial content loses detail at archive time.
       If adding new concerns without changing existing behavior, use ADDED instead.
 
-      Example:
-
-      ```
-      ## ADDED Requirements
-
-      ### Requirement: User can export data
-
-      The system SHALL allow users to export their data in CSV format.
-
-      #### Scenario: Successful export
-
-      - **WHEN** user clicks "Export" button
-      - **THEN** system downloads a CSV file with all user data
-
-      ## REMOVED Requirements
-
-      ### Requirement: Legacy export
-
-      **Reason**: Replaced by new export system
-      **Migration**: Use new export endpoint at /api/v2/export
-      ```
 
       Specs should be testable — each scenario is a potential test case.
     requires:
@@ -135,63 +114,63 @@ artifacts:
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist with trackable tasks. Also seeds Beads issues.
+    description: >
+      Implementation checklist. Seeds Beads molecule via formula pour —
+      one command creates the entire dependency graph.
     template: tasks.md
     instruction: >
-      Create the task list that breaks down the implementation work AND seed
-      corresponding issues in Beads.
+      Create the task list AND seed Beads using the formula + molecule system.
 
 
-      **IMPORTANT: Follow the template below exactly.**
+      **1. Ensure the spec-driven-change formula exists**
+
+      If `.beads/formulas/spec-driven-change.formula.toml` does not exist,
+      create it from the template at
+      `openspec/schemas/spec-driven-with-beads/templates/spec-driven-change.formula.toml`.
 
 
-      Guidelines:
+      **2. Pour the molecule**
 
-      - Group related tasks under ## numbered headings
-
-      - Each task MUST be a checkbox: `- [ ] X.Y Task description`
-
-      - Tasks should be small enough to complete in one session
-
-      - Order tasks by dependency (what must be done first?)
-
-
-      Example:
+      Run:
 
       ```
+      bd pour spec-driven-change --var name=<change-name>
+      ```
 
-      ## 1. Setup
+      This creates a molecule (parent epic + 5 child steps) with proper
+      `needs` dependencies:
 
-      - [ ] 1.1 Create new module structure
+      ```
+      bd-xyz (epic: Spec-driven Change: <change-name>)
+      ├── bd-xyz.1  proposal          (human, needs: —)
+      ├── bd-xyz.2  specs             (needs: proposal)
+      ├── bd-xyz.3  design            (needs: specs)
+      ├── bd-xyz.4  implement         (needs: design)
+      └── bd-xyz.5  consolidate       (human, needs: implement)
+      ```
 
-      - [ ] 1.2 Add dependencies to package.json
+      The dependency chain is built into the formula — no manual `bd dep add` needed.
 
-      ## 2. Core Implementation
 
-      - [ ] 2.1 Implement data export function
+      **3. Label the molecule**
 
-      - [ ] 2.2 Add CSV formatting utilities
-
+      ```
+      bd label add bd-xyz change:<change-name>
+      bd label add bd-xyz schema:spec-driven-with-beads
       ```
 
 
-      Reference specs for what needs to be built, design for how to build it.
-
-      Each task should be verifiable — you know when it's done.
-
-
-      **After writing tasks.md, seed Beads:**
-
-      Run `bd create "Spec-driven Change: <change-name>" -t epic -p 1` for the
-      parent epic, then for each task run:
+      **4. Set acceptance criteria for the implement step**
 
       ```
-      bd create "X.Y Task description" -t task -p 1
+      bd update bd-xyz.4 --acceptance "All spec scenarios pass. Tests added."
       ```
 
-      Then link dependencies using `bd dep add <child> <parent>`.
 
-      Use `bd ready` to verify the task list is properly seeded.
+      **5. Write tasks.md**
+
+      Write the standard OpenSpec tasks.md for human readability.
+      The molecule is the source of truth; tasks.md is a view.
     requires:
       - specs
       - design
@@ -201,30 +180,52 @@ apply:
     - tasks
   tracks: tasks.md
   instruction: |
-    Use Beads to drive implementation, not tasks.md directly.
+    Drive implementation through the molecule. The dependency graph
+    enforces order automatically.
 
     Workflow:
-    1. Run `bd ready` to see the next unblocked task.
-    2. Pick the highest priority task and run `bd update <id> --claim`.
-    3. Read specs/design for context, implement the code.
-    4. Run `bd close <id> --reason "Implemented"`.
-    5. Repeat from step 1 until `bd ready` returns nothing.
+    1. Run `bd mol list --json` to find the molecule for this change.
+    2. Run `bd dep tree <mol-id>` to see the step hierarchy.
+    3. Run `bd ready` — only shows steps whose needs are met.
+    4. For the next ready step, claim it:
+       ```
+       bd update <mol-id>.N --claim
+       ```
+    5. Read specs/design for context, implement the code.
+    6. Run acceptance criteria check if applicable:
+       ```
+       bd show <mol-id>.N  # view acceptance criteria
+       ```
+    7. Close the step:
+       ```
+       bd close <mol-id>.N --reason "Implemented"
+       ```
+    8. Run `bd ready` again — next step in the chain becomes available.
+    9. Repeat until all steps are closed.
 
-    Mark tasks.md checkboxes as you go for a human-readable view, but
-    Beads is the source of truth for task state. Do not skip `bd close`.
+    Tips:
+    - `bd blocked` shows steps waiting on dependencies.
+    - `bd stats` shows molecule progress.
+    - Mark tasks.md checkboxes for human readability, but the molecule
+      is the source of truth.
 
-    Pause if you hit blockers or need clarification. Use `bd show <id>` to
-    inspect task details, and `bd update <id>` to add notes.
+    Pause if you hit blockers or need clarification.
 
 consolidate:
   requires:
     - apply
   instruction: |
-    All tasks are complete. Run consolidate to close the loop:
+    Close the molecule and persist learnings.
 
-    1. Close any remaining open Beads issues: `bd close <id1> <id2> ...`
-    2. Compact old closed issues: `bd compact`
-    3. Distill learnings from this change and persist them:
+    1. Verify all steps are closed:
+       ```
+       bd mol show <mol-id>
+       ```
+    2. Run molecule compaction:
+       ```
+       bd compact
+       ```
+    3. Distill learnings from this change:
        ```
        bd remember --key spec-driven-beads-<change-name> "Lessons from this change:
        - What unexpected problems did you encounter?
@@ -232,6 +233,14 @@ consolidate:
        - Any surprising edge cases or constraints?
        - What should the next similar change do differently?"
        ```
-    4. Run the OpenSpec archive command: `openspec archive` (moves change folder, updates source specs)
+    4. Label the molecule as consolidated:
+       ```
+       bd label add <mol-id> status:consolidated
+       ```
+    5. Run the OpenSpec archive command:
+       ```
+       openspec archive
+       ```
 
-    This ensures knowledge persists across sessions — future `bd prime` calls will inject these learnings.
+    Future `bd prime` calls will inject the learnings into every session.
+    The labeled molecule remains searchable: `bd list --label status:consolidated`.
