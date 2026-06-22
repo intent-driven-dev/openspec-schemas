@@ -1,17 +1,29 @@
-# NNNN. <Decision title>
+# ADR Review Manifest
 
-- Status: proposed | accepted | accepted, supersedes ADR-XXXX
+## ADR Review Completed
+
 - Date: YYYY-MM-DD
-<!-- Supersedes: ADR-XXXX  (include this line only if this ADR replaces a prior in-force ADR; omit otherwise) -->
+- Reviewer:
+- Change:
 
-## Context
+## In-Force ADR Context Reviewed
 
-<!-- Forces at play, constraints, what's prompting this decision. If this ADR supersedes a prior one, explain here why the earlier decision is being revisited — the prior ADR's file is immutable and will not be edited. -->
+<!-- List currently in-force repository-level ADRs reviewed before completing this change.
+Use `- adr/NNNN-kebab-title.md - short relevance note`.
+If none exist, write `- None: no existing repository-level ADRs were present.` -->
 
-## Decision
+-
 
-<!-- The choice being made, stated clearly and unambiguously. -->
+## Repository-Level ADRs Created
 
-## Consequences
+<!-- Reference every durable ADR created for this change.
+Use `- adr/NNNN-kebab-title.md - decision summary`.
+Do not duplicate the ADR's Context, Decision, or Consequences sections here.
+If no durable ADR was needed, write:
+`- None: no major durable architectural decisions were introduced by this change.` -->
 
-<!-- Positive, negative, and neutral consequences. What becomes easier? What becomes harder? -->
+-
+
+## Notes
+
+<!-- Optional concise review notes. Keep durable decision details in repository-level ADR files. -->

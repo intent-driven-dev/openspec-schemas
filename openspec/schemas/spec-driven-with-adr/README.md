@@ -35,16 +35,24 @@ Artifact order:
 Gate expectations:
 - `specs` must be based on the capabilities identified in `proposal.md`.
 - `design` must account for the proposal, specs, and currently in-force ADRs.
-- `adr` records durable decisions after design and before task planning.
+- `adr` completes by writing `openspec/changes/<change>/adr.md`, a concise
+  ADR review manifest created after design and before task planning.
 - `tasks` are planned only after proposal, specs, design, and ADR artifacts are
   complete.
 
 ## ADR Persistence
 
-ADR files are generated under the target repository's top-level `adr/` folder,
-not only inside the OpenSpec change folder. Accepted ADRs are immutable. If a
-future decision changes a prior ADR, create a new ADR that supersedes the old
-one and leave the original file unchanged.
+`openspec/changes/<change>/adr.md` is the per-change ADR review artifact used
+for OpenSpec artifact completion. It records that ADR review happened, lists
+the in-force ADR context that was reviewed, and references any durable ADR files
+created for the change.
+
+Durable ADR files are generated under the target repository's top-level `adr/`
+folder, not inside the OpenSpec change folder. Create
+`adr/NNNN-kebab-title.md` only when the change introduces a major durable
+architectural decision. Accepted ADRs are immutable. If a future decision
+changes a prior ADR, create a new ADR that supersedes the old one and leave the
+original file unchanged.
 
 ## Note
 

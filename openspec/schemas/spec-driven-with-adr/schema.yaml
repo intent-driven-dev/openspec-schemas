@@ -204,16 +204,25 @@ artifacts:
     requires:
       - proposal
   - id: adr
-    generates: "../../../adr/*.md"
-    description: Architecture Decision Records distilled from design for future reference
+    generates: adr.md
+    description: Change-local ADR review manifest with durable ADR references
     template: adr.md
     instruction: >
-      Distill significant decisions from design.md into Architecture Decision
-      Records that live in <repo>/adr/ and persist across changes. The path
-      <repo>/adr/ means the target repository's top-level adr/ folder beside
-      openspec/, not any folder inside openspec/. ADR files MUST be written
-      outside openspec/ and MUST NOT be written under
-      openspec/changes/<change>/.
+      Complete ADR review for this change by writing
+      openspec/changes/<change>/adr.md. This change-local file is a concise
+      review manifest and the OpenSpec completion marker for the adr artifact.
+      Existing files under <repo>/adr/ are decision history and context; they
+      do not complete ADR review for a new change.
+
+
+      Durable Architecture Decision Records still live in <repo>/adr/ and
+      persist across changes. The path <repo>/adr/ means the target
+      repository's top-level adr/ folder beside openspec/, not any folder
+      inside openspec/. If this change introduces a new durable architectural
+      decision, create a repository-level ADR at
+      <repo>/adr/NNNN-kebab-title.md and reference it from
+      openspec/changes/<change>/adr.md. Do not duplicate the full ADR content
+      in the manifest.
 
 
       IRON RULE — ADRs are immutable once accepted. You MUST NOT edit a prior
@@ -230,7 +239,8 @@ artifacts:
 
       1. Read every existing ADR in <repo>/adr/. Build the supersession graph
       from each ADR's Supersedes field. Note the highest sequence number in
-      use.
+      use. Record the currently in-force ADRs reviewed in the change-local
+      adr.md manifest.
 
 
       2. Re-read design.md. Identify decisions that meet ALL of these:
@@ -247,15 +257,21 @@ artifacts:
 
       3. For each qualifying decision, create a NEW file at
       <repo>/adr/NNNN-kebab-title.md, where NNNN is a 4-digit sequence one
-      greater than the highest existing. Use the template (MADR-short). If
+      greater than the highest existing. Use the repository's ADR format
+      (MADR-short: title, status/date, context, decision, consequences). If
       this decision replaces a prior in-force ADR, set Status to
       "accepted, supersedes ADR-NNNN", populate the `Supersedes:` field, and
       explain in Context why the prior decision is being revisited. Do NOT
-      touch the prior ADR's file — leave it exactly as it was.
+      touch the prior ADR's file — leave it exactly as it was. Reference every
+      new repository-level ADR file from openspec/changes/<change>/adr.md.
 
 
       4. If nothing meets the bar, do not invent ADRs. The step still completes
-      as long as <repo>/adr/ already contains at least one ADR file.
+      by writing openspec/changes/<change>/adr.md with:
+      - ADR review completed for this change.
+      - The in-force ADR context reviewed, or "none" if no existing ADRs exist.
+      - A statement that no major durable architectural decisions were
+      introduced.
 
 
       Filename convention: NNNN-kebab-title.md (e.g.,
