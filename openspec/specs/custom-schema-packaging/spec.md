@@ -44,6 +44,13 @@ The repository root SHALL include a `README.md` that explains the purpose of thi
 - **THEN** it can copy the full `openspec/schemas/intent-driven/` folder into a target project's `openspec/schemas/intent-driven/`
 - **AND** activate it with `schema: intent-driven`.
 
+#### Scenario: Root catalog excludes removed linearized schema
+- **GIVEN** the `linearized` schema package has been removed from `openspec/schemas/linearized/`
+- **WHEN** a human or coding agent reads the root `README.md`
+- **THEN** the schema catalog no longer lists `linearized` as an available schema
+- **AND** the README no longer points readers to `openspec/schemas/linearized/README.md`
+- **AND** install examples no longer tell agents to activate `schema: linearized`
+
 ### Requirement: Schema changes SHALL be validated with OpenSpec CLI
 Any new schema or schema modification in this repository SHALL be verified by running `openspec schema validate <schema-name>` before considering the change complete.
 
