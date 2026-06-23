@@ -39,8 +39,11 @@ Gate expectations:
   `specs/<capability>/spec.md`.
 - `design` explains the implementation approach and accounts for currently
   in-force ADRs.
-- `adr` records durable architecture decisions after design and before task
-  planning.
+- `adr` writes the per-change ADR review manifest at
+  `openspec/changes/<change>/adr.md` after design and before task planning.
+  Durable repository-level ADR files are created only when the change
+  introduces a major architectural decision that should persist beyond the
+  change.
 - `tasks` are planned only after proposal, specs, design, and ADR artifacts are
   complete.
 
@@ -68,10 +71,17 @@ Gherkin lint configuration.
 
 ## ADR Persistence
 
-ADR files are generated under the target repository's top-level `adr/` folder,
-not inside the OpenSpec change folder. Accepted ADRs are immutable. If a future
-decision changes a prior ADR, create a new ADR that supersedes the old one and
-leave the original file unchanged.
+The `adr` artifact completion signal is the change-local review manifest at
+`openspec/changes/<change>/adr.md`. Existing files under the repository-level
+`adr/` folder are context for a new change; they are not completion evidence
+for that change.
+
+Durable ADR files are generated under the target repository's top-level `adr/`
+folder only when the change introduces a major architectural decision that
+should persist beyond the change. They are not written inside the OpenSpec
+change folder. Accepted ADRs are immutable. If a future decision changes a
+prior ADR, create a new ADR that supersedes the old one and leave the original
+file unchanged.
 
 ## Validate
 

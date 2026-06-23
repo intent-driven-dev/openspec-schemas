@@ -1,17 +1,20 @@
-# NNNN. <Decision title>
+# ADR Review Manifest
 
-- Status: proposed | accepted | accepted, supersedes ADR-XXXX
-- Date: YYYY-MM-DD
-<!-- Supersedes: ADR-XXXX  (include this line only if this ADR replaces a prior in-force ADR; omit otherwise) -->
+- Status: completed
+- Review date: YYYY-MM-DD
 
-## Context
+## Review Summary
 
-<!-- Forces at play, constraints, what's prompting this decision. If this ADR supersedes a prior one, explain here why the earlier decision is being revisited; the prior ADR's file is immutable and will not be edited. -->
+ADR review completed for this change.
 
-## Decision
+## In-Force ADRs Reviewed
 
-<!-- The choice being made, stated clearly and unambiguously. -->
+<!-- Replace with every currently in-force repository-level ADR reviewed for this change. -->
 
-## Consequences
+- None - `<repo>/adr/` has no in-force ADRs.
 
-<!-- Positive, negative, and neutral consequences. What becomes easier? What becomes harder? -->
+## New Durable ADRs Created
+
+<!-- Replace with every repository-level ADR created for this change. Do not duplicate full Context, Decision, or Consequences content here. -->
+
+- None - no major durable architectural decisions were introduced.

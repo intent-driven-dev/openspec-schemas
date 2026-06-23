@@ -179,16 +179,22 @@ artifacts:
     requires:
       - proposal
   - id: adr
-    generates: "../../../adr/*.md"
-    description: Architecture Decision Records distilled from design for future reference
+    generates: adr.md
+    description: Per-change ADR review manifest and durable decision handoff
     template: adr.md
     instruction: >
-      Distill significant decisions from design.md into Architecture Decision
-      Records that live in <repo>/adr/ and persist across changes. The path
+      Complete ADR review for this change by writing a concise manifest at
+      openspec/changes/<change>/adr.md. This change-local file is the artifact
+      completion marker for the adr step. Existing files under <repo>/adr/ are
+      required context for the review, but they MUST NOT satisfy completion for
+      a new change.
+
+
+      If the change introduces a major durable architectural decision, also
+      create an Architecture Decision Record under <repo>/adr/. The path
       <repo>/adr/ means the target repository's top-level adr/ folder beside
-      openspec/, not any folder inside openspec/. ADR files MUST be written
-      outside openspec/ and MUST NOT be written under
-      openspec/changes/<change>/.
+      openspec/, not any folder inside openspec/. Repository-level ADR files
+      persist across changes and MUST be written outside openspec/.
 
 
       IRON RULE - ADRs are immutable once accepted. You MUST NOT edit a prior
@@ -217,16 +223,24 @@ artifacts:
       intentionally diverge from one. If diverging, the new ADR supersedes the
       prior.
 
-      3. For each qualifying decision, create a NEW file at
+      3. For each qualifying decision, create a NEW repository-level file at
       <repo>/adr/NNNN-kebab-title.md, where NNNN is a 4-digit sequence one
-      greater than the highest existing. Use the template (MADR-short). If
-      this decision replaces a prior in-force ADR, set Status to
+      greater than the highest existing. Include title, Status, Date, optional
+      Supersedes, and MADR-short sections: Context, Decision, and
+      Consequences. If this decision replaces a prior in-force ADR, set Status to
       "accepted, supersedes ADR-NNNN", populate the `Supersedes:` field, and
       explain in Context why the prior decision is being revisited. Do NOT
       touch the prior ADR's file.
 
-      4. If nothing meets the bar, do not invent ADRs. The step still completes
-      as long as <repo>/adr/ already contains at least one ADR file.
+      4. Write openspec/changes/<change>/adr.md using the template. The
+      manifest MUST state that ADR review completed for this change, list the
+      in-force ADR context reviewed, and reference every repository-level ADR
+      file created for this change. It MUST NOT duplicate full Context,
+      Decision, or Consequences content from repository-level ADR files.
+
+      5. If nothing meets the bar, do not invent ADRs. The manifest MUST
+      explicitly state that no major durable architectural decisions were
+      introduced and no new repository-level ADR files were created.
 
 
       Filename convention: NNNN-kebab-title.md (e.g.,
