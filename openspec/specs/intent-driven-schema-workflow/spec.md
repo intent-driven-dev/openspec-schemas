@@ -56,40 +56,59 @@ The `intent-driven` schema SHALL make OpenSpec Markdown syntax the merge wrapper
 - **AND** allows `AND` and `BUT` for follow-on steps
 - **AND** directs `Then` steps to express observable outcomes rather than implementation details.
 
-### Requirement: Intent-driven schema SHALL persist durable decisions as top-level ADRs
-The `intent-driven` schema SHALL require the ADR artifact to distill durable architectural decisions from design into immutable ADR files under the target repository's top-level `adr/` folder.
+### Requirement: Intent-driven schema SHALL persist durable decisions with per-change ADR review
+The `intent-driven` schema SHALL require each change to complete ADR review through a change-local manifest at `openspec/changes/<change>/adr.md`, while preserving durable architectural decisions as immutable ADR files under the target repository's top-level `adr/` folder when a change introduces decisions worth carrying forward.
 
-#### Scenario: ADRs are written outside OpenSpec changes
-- **GIVEN** a project activates `schema: intent-driven`
-- **WHEN** the `adr` artifact is created
-- **THEN** the schema instructions MUST direct ADR files to `<repo>/adr/NNNN-kebab-title.md`
-- **AND** `<repo>/adr/` MUST mean a top-level folder beside `openspec/`
-- **AND** ADR files MUST NOT be written under `openspec/changes/<change>/`.
-
-#### Scenario: ADR artifact completion checks repository-level output
+#### Scenario: ADR artifact uses a change-local completion marker
 - **GIVEN** the affected schema is `intent-driven`
 - **WHEN** `openspec/schemas/intent-driven/schema.yaml` defines the `adr` artifact
-- **THEN** the artifact `generates` value MUST resolve to `<repo>/adr/*.md` from the change directory
-- **AND** the value MUST match the known-good relative path pattern `../../../adr/*.md`.
+- **THEN** the artifact `generates` value MUST be `adr.md`
+- **AND** the artifact completion check MUST be scoped to `openspec/changes/<change>/adr.md`
+- **AND** existing files under the repository-level `adr/` folder MUST NOT satisfy completion for a new change.
 
-#### Scenario: Change-local proposal does not complete ADR artifact
+#### Scenario: ADR artifact records durable ADR manifest entries
+- **GIVEN** the affected schema is `intent-driven`
+- **WHEN** the `adr` artifact is created
+- **THEN** the change-local `adr.md` artifact MUST act as a concise manifest, not a duplicate full ADR
+- **AND** it MUST state that ADR review was completed for the change
+- **AND** it MUST list existing in-force ADRs reviewed for the change
+- **AND** if the change introduces any new durable architectural decision, a corresponding repository-level ADR file MUST be created under `<repo>/adr/`
+- **AND** the change-local `adr.md` artifact MUST reference every repository-level ADR file created for the change
+- **AND** it MUST NOT duplicate the full context, decision, or consequences content from any repository-level ADR file
+- **AND** when no new repository-level ADR is needed, it MUST explicitly state that no major durable architectural decisions were introduced.
+
+#### Scenario: ADR artifact preserves repository-level decision history
+- **GIVEN** a project activates `schema: intent-driven`
+- **WHEN** the `adr` artifact identifies a durable architectural decision that is not already captured by an in-force ADR
+- **THEN** the schema instructions MUST direct ADR files to `<repo>/adr/NNNN-kebab-title.md`
+- **AND** `<repo>/adr/` MUST mean a top-level folder beside `openspec/`, not a folder inside `openspec/`
+- **AND** accepted ADR immutability and supersession rules MUST remain intact.
+
+#### Scenario: Existing ADRs are context, not completion
 - **GIVEN** a project uses the `intent-driven` schema
-- **WHEN** a change contains `proposal.md` but no generated ADR file under the repository-level `adr/` folder
+- **AND** the repository-level `adr/` folder already contains one or more ADR markdown files from previous changes
+- **WHEN** a new change has no `openspec/changes/<change>/adr.md`
 - **THEN** the `adr` artifact MUST NOT be considered complete
-- **AND** downstream task readiness MUST remain blocked until the ADR artifact completion check observes the intended ADR output location.
-
-#### Scenario: Existing ADRs remain immutable
-- **GIVEN** a current architectural decision needs to be changed
-- **WHEN** the `adr` artifact records the new decision
-- **THEN** the schema instructions MUST require a new ADR file
-- **AND** the new ADR MAY supersede a prior ADR using status text and a `Supersedes:` field
-- **AND** the prior ADR file MUST remain unchanged.
+- **AND** downstream task readiness MUST remain blocked until the change-local ADR review artifact exists.
 
 #### Scenario: Design reads currently in-force ADRs
 - **GIVEN** a project has existing ADR files under `<repo>/adr/`
 - **WHEN** the `design` artifact is created
 - **THEN** the schema instructions require the contributor to identify currently in-force ADRs by walking supersession links
 - **AND** only currently in-force ADRs constrain the design.
+
+### Requirement: Intent-driven schema documentation SHALL explain ADR review and persistence
+The `intent-driven` schema documentation SHALL distinguish the per-change ADR review artifact from durable repository-level ADR files.
+
+#### Scenario: ADR review manifest is documented
+- **WHEN** a contributor reads `openspec/schemas/intent-driven/README.md`
+- **THEN** it explains that `openspec/changes/<change>/adr.md` is the per-change ADR review manifest used for OpenSpec artifact completion
+- **AND** it explains that existing repository-level ADR files are context for new changes, not completion evidence for those changes.
+
+#### Scenario: ADR persistence remains documented
+- **WHEN** a contributor reads `openspec/schemas/intent-driven/README.md`
+- **THEN** it explains that durable ADR files are generated under the target repository's top-level `adr/` folder
+- **AND** it explains that repository-level ADR files are created only when the change introduces a major durable architectural decision.
 
 ### Requirement: Intent-driven schema SHALL validate cleanly
 Changes adding or modifying `openspec/schemas/intent-driven/` SHALL pass OpenSpec schema validation before completion.
