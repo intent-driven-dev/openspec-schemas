@@ -34,6 +34,8 @@ Affected schema:
 - **THEN** the generated task guidance requires contributors to preserve unrelated scenarios in the existing feature file
 - **AND** matching scenarios are edited in place when their accepted behaviour changes
 - **AND** new scenarios are added to the matching feature file when they extend the same capability
+- **AND** scenarios that are explicitly removed in the spec delta are deleted from the matching feature file
+- **AND** when a scenario is deleted from a feature file, the corresponding step definitions, fixtures, and helpers in `acceptance-tests/` are removed in sync so that feature files and acceptance tests remain coherent
 - **AND** duplicate feature files or duplicate scenarios are rejected before the feature extraction commit.
 
 ### Requirement: Behaviour-driven tasks SHALL be generated from a gate contract
@@ -81,7 +83,7 @@ Affected schema:
 - **WHEN** implementation work is being verified
 - **THEN** the contributor runs the full acceptance test suite with HTML report output
 - **AND** if the suite passes, the contributor proceeds to completion
-- **AND** if the suite fails only for recorded not-yet-implemented scenarios, the contributor continues with the next planned scenario slice
+- **AND** if the suite fails only for scenarios listed as not-yet-implemented in the current task checklist for this slice, the contributor continues with the next planned scenario slice
 - **AND** if the suite fails for any implemented scenario or regression, the contributor fixes implementation code and reruns the suite
 - **AND** the generated task list limits this loop to the recorded attempt limit.
 
@@ -108,7 +110,7 @@ Affected schema:
 - **WHEN** a contributor completes a slice
 - **THEN** they run the full acceptance suite instead of only running the scenario or tag they just implemented
 - **AND** all previously implemented scenarios must remain green
-- **AND** the only acceptable red scenarios are explicitly recorded as not yet implemented in the current task state.
+- **AND** the only acceptable red scenarios are those listed as not-yet-implemented in the current task checklist.
 
 ### Requirement: Behaviour-driven acceptance tests SHALL not be weakened after the failing-test checkpoint
 The `behaviour-driven` schema MUST protect committed feature files and acceptance tests from being weakened merely to make implementation pass.

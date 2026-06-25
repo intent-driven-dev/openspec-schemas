@@ -6,9 +6,8 @@
 
 ## 2. Update Canonical Behaviour Specs
 
-- [ ] 2.1 Update `openspec/specs/behaviour-driven-schema-workflow/spec.md` with the archived version of this change's modified requirements.
-- [ ] 2.2 Confirm the canonical spec still lists `behaviour-driven` as the affected schema for each modified requirement.
-- [ ] 2.3 Confirm the canonical spec includes post-apply verification expectations for `openspec schema validate behaviour-driven`, `openspec schema review behaviour-driven`, and strict change validation.
+- [ ] 2.1 Confirm the canonical spec still lists `behaviour-driven` as the affected schema for each modified requirement.
+- [ ] 2.2 Confirm the canonical spec includes post-apply verification expectations for `openspec schema validate behaviour-driven`, `openspec schema review behaviour-driven`, and strict change validation.
 
 ## 3. Verify
 
@@ -16,3 +15,4 @@
 - [ ] 3.2 Run `openspec schema validate behaviour-driven`.
 - [ ] 3.3 Run `openspec schema review behaviour-driven`.
 - [ ] 3.4 Review generated guidance for placeholder leakage and confirm no `<...>` placeholders remain in the packaged task template after implementation.
+- [ ] 3.5 Run `git diff <failing-acceptance-checkpoint-sha> -- features/ acceptance-tests/` and confirm no unintended modifications to committed acceptance coverage.

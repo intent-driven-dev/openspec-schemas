@@ -1,13 +1,3 @@
----
-linear_story_id:
-linear_story_identifier:
-linear_story_title:
-linear_story_url:
-linear_story_state:
-linear_team:
-linear_project:
----
-
 ## Why
 
 The current `behaviour-driven` workflow is too coarse after the failing acceptance gate: it tells contributors to implement until acceptance passes, but does not make scenario coverage, acceptance artifact stability, or slice-by-slice progress explicit.
