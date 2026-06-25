@@ -1,18 +1,24 @@
 # Behaviour-Driven OpenSpec Schema
 
-`behaviour-driven` is a proposal-to-tasks workflow for changes where observable
-behaviour should drive design and implementation.
+`behaviour-driven` is a strict BDD workflow for changes whose implementation
+must be driven by observable Gherkin acceptance tests.
 
-It keeps specs mergeable by default OpenSpec archive by generating
-`specs/<capability>/spec.md` files. The Markdown headings are the OpenSpec
-wrapper; the content inside each requirement and scenario should be written in
-Gherkin style with `GIVEN`, `WHEN`, and `THEN` steps.
+The schema keeps OpenSpec delta specs mergeable while requiring downstream
+projects to extract root-level `features/*.feature` files, test them with a
+root-level `acceptance-tests/` Node project, and pass Cucumber.js before the
+implementation gate is complete.
 
-- Good fit: product or platform behaviour changes, user-facing flows, domain
-  rules, and acceptance criteria that should be easy to turn into tests.
-- Not a good fit: small tactical fixes, docs-only changes, dependency bumps, or
-  durable architecture decision workflows. Use `intent-driven` when ADRs are
-  needed.
+## Directory Roles
+
+- **`features/`** — canonical executable behaviour documentation. Feature
+  files are derived from OpenSpec Markdown specs and define the observable
+  behaviour. They are committed before implementation begins and
+  treated as off limits for ordinary implementation fixes.
+
+- **`acceptance-tests/`** — runtime and test glue. Contains the Cucumber.js
+  Node project, step definitions, fixtures, helpers, environment setup, HTML
+  reports, and configuration. It wires the `features/` to runnable
+  tests but does not own the behaviour definition.
 
 ## Activate
 
@@ -22,7 +28,7 @@ Set this in `openspec/config.yaml`:
 schema: behaviour-driven
 ```
 
-## Stage Gates
+## Canonical Flow
 
 Artifact order:
 
@@ -30,42 +36,32 @@ Artifact order:
 proposal -> specs -> design -> tasks
 ```
 
-Gate expectations:
+Apply-time order:
 
-- `proposal` states why the change matters and lists the capabilities that need
-  behaviour specs.
-- `specs` creates one OpenSpec Markdown delta file per capability at
-  `specs/<capability>/spec.md`.
-- `design` explains the implementation approach after the behaviour is clear.
-- `tasks` are planned only after proposal, specs, and design artifacts are
-  complete.
-
-## Spec Format
-
-Use OpenSpec Markdown delta headers so archive can merge the change:
-
-```md
-## ADDED Requirements
-
-### Requirement: User data export
-Feature: User data export
-
-Rule: Users can export their own data
-
-#### Scenario: Successful CSV export
-- **GIVEN** a user has saved data
-- **WHEN** the user exports their data as CSV
-- **THEN** the system provides a CSV file containing the user's data
+```text
+OpenSpec specs -> feature files -> failing Cucumber.js acceptance tests -> implementation -> passing Cucumber.js acceptance tests
 ```
 
-Do not create `.feature` files for this schema. External Gherkin linting can be
-run by the target project, but the schema package intentionally does not include
-Gherkin lint configuration.
+## Strict BDD Gates
+
+- Extract or update root `features/*.feature` files before writing acceptance
+  test code.
+- Run `gherkin-lint` from `acceptance-tests/` and require zero errors before
+  the feature extraction commit.
+- Use a root `acceptance-tests/` Node project with Cucumber.js, JavaScript lint
+  scripts, ignored `node_modules/`, and HTML acceptance reports.
+- Commit the failing acceptance setup before implementation starts; the failure
+  must be the intended unimplemented application behaviour, not test plumbing.
+- Run acceptance fixes as a bounded retry loop using the attempt limit recorded
+  in `tasks.md`, defaulting to 3 when none is chosen.
+- Commit after feature extraction, after failing acceptance setup, and after the
+  passing implementation. Stop before crossing a gate if its commit cannot be
+  made.
+- Never weaken committed feature files or acceptance tests to make the
+  implementation pass.
 
 ## Validate
 
 ```bash
 openspec schema validate behaviour-driven
 ```
-
-For more schemas, refer to https://github.com/intent-driven-dev/openspec-schemas.
