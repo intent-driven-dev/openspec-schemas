@@ -8,6 +8,18 @@ projects to extract root-level `features/*.feature` files, test them with a
 root-level `acceptance-tests/` Node project, and pass Cucumber.js before the
 implementation gate is complete.
 
+## Directory Roles
+
+- **`features/`** — canonical executable behaviour documentation. Feature
+  files are derived from OpenSpec Markdown specs and define the observable
+  behaviour. They are committed before implementation begins and
+  treated as off limits for ordinary implementation fixes.
+
+- **`acceptance-tests/`** — runtime and test glue. Contains the Cucumber.js
+  Node project, step definitions, fixtures, helpers, environment setup, HTML
+  reports, and configuration. It wires the `features/` to runnable
+  tests but does not own the behaviour definition.
+
 ## Activate
 
 Set this in `openspec/config.yaml`:

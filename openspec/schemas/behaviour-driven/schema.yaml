@@ -196,9 +196,16 @@ artifacts:
       Required BDD gates:
 
       - Extract or update root-level `features/*.feature` files from the
-        OpenSpec Markdown specs before writing acceptance-test code. For
-        modified behaviour, identify and update the existing feature file
-        instead of creating a duplicate.
+        OpenSpec Markdown specs before writing acceptance-test code. Map
+        each capability to an existing `features/*.feature` file or a new
+        file; do not create a duplicate feature file. When updating an
+        existing file, merge semantically: preserve unrelated scenarios,
+        edit matching scenarios in place, add new scenarios for new
+        behaviour, and delete scenarios the spec delta explicitly removes.
+        When a scenario is deleted, remove the corresponding step
+        definitions, fixtures, and helpers from `acceptance-tests/` in
+        sync. Reject duplicate feature files or duplicate scenarios before
+        the extraction commit.
 
       - Configure a root-level `acceptance-tests/` Node project that uses
         Cucumber.js, ignores `acceptance-tests/node_modules/` in git, defines
@@ -210,17 +217,25 @@ artifacts:
         feature extraction gate.
 
       - Add step definitions, fixtures, helpers, and environment setup after
-        the feature gate commit. Run Cucumber.js with HTML report output and
-        confirm the suite fails for the intended unimplemented application
-        behaviour, not missing steps, bad configuration, feature syntax, or
-        test plumbing. Commit this failing acceptance gate before implementing
-        application code.
+        the feature gate commit. The failing acceptance gate MUST cover every
+        in-scope business scenario from the OpenSpec delta before any
+        application implementation begins. Run Cucumber.js with HTML report
+        output and confirm the suite fails for the intended unimplemented
+        application behaviour, not missing steps, bad configuration, feature
+        syntax, or test plumbing. Commit this failing acceptance gate before
+        implementing application code.
 
       - Start implementation only after the failing acceptance-test setup has
         been committed. Implementation tasks MUST be granular and name each
         affected subsystem, such as API handlers, domain services, persistence,
         CLI/UI surfaces, adapters, configuration, docs, fixtures, and test
-        helpers when those subsystems are in scope.
+        helpers when those subsystems are in scope. Structure implementation
+        as scenario slices: each slice identifies the business scenario or
+        scenario group it intends to turn green, then runs the full
+        Cucumber.js acceptance suite. All previously implemented scenarios
+        must remain green; the only acceptable red scenarios are those
+        listed as not-yet-implemented in the current task checklist for
+        that slice.
 
       - Before the acceptance-fix loop, ask how many attempts to allow; default
         to 3 when no limit is provided. Expand the recorded limit into one
@@ -259,14 +274,21 @@ apply:
 
     Do not start acceptance-test code before the committed feature extraction
     gate. Do not start application implementation before the committed failing
-    Cucumber.js acceptance gate. During implementation, use the attempt limit
-    recorded in tasks.md; if none is recorded, default to 3 and state that
-    default before running the loop. Each attempt must run Cucumber.js with HTML
-    report output. After a failed attempt, fix implementation code and retry
-    until the suite passes or the limit is exhausted. If the final allowed
-    attempt fails, stop with an error saying there are still errors and include
-    the HTML report path.
+    Cucumber.js acceptance gate. Implement in scenario slices as recorded in
+    tasks.md: each slice targets one business scenario or scenario group.
+    After each slice, run the full Cucumber.js acceptance suite. Only the
+    scenarios listed as not-yet-implemented in the current checklist may be
+    red; any regression in previously passing scenarios requires a fix before
+    proceeding. During implementation, use the attempt limit recorded in
+    tasks.md; if none is recorded, default to 3 and state that default before
+    running the loop. Each attempt must run Cucumber.js with HTML report
+    output. After a failed attempt, fix implementation code and retry until
+    the suite passes or the limit is exhausted. If the final allowed attempt
+    fails, stop with an error saying there are still errors and include the
+    HTML report path.
 
-    Never weaken committed feature files or acceptance tests to make
-    implementation pass. If accepted behaviour is wrong, pause and update the
-    OpenSpec artifacts before changing committed acceptance coverage.
+    Treat features/ and acceptance-tests/ as off limits during ordinary
+    implementation. Step definitions, fixtures, helpers, or feature text are
+    not changed merely to make failing scenarios pass. Any necessary correction
+    to accepted behaviour requires updating the OpenSpec change artifacts
+    before modifying committed feature or acceptance-test files.
