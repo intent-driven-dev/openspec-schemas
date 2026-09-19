@@ -1,0 +1,21 @@
+formula = "spec-compliance"
+description = "Auto-inject spec compliance verification before consolidate"
+version = 1
+type = "aspect"
+
+# This aspect targets any step named "consolidate" and injects a
+# spec-verification pre-step. Applied automatically when the aspect file
+# exists in .beads/formulas/.
+
+[[advice]]
+target = "*.consolidate"
+
+[advice.before]
+id = "verify-specs-{step.id}"
+title = "Verify spec scenarios pass for {step.title}"
+needs = ["implement"]
+type = "task"
+description = >
+  Read the spec files at openspec/changes/{{name}}/specs/ and verify
+  every scenario passes against the implementation. If any scenario
+  fails, block consolidate until the issue is resolved.
